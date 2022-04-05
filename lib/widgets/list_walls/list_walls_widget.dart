@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wallz/models/wall_item.dart';
 import 'package:wallz/api/wall_items_api.dart';
+import 'package:wallz/pages/wall_download_page.dart';
 
 class ListWalls extends StatefulWidget {
 
@@ -62,15 +63,24 @@ class _ListWallsState extends State<ListWalls> {
     List<Widget> result = [];
 
     widget.walls.forEach((element) {
-      var src = element.thumbs.small;
+      var src = element.thumbs.original;
       var img = Image(
           image: NetworkImage(src),
           fit: BoxFit.cover
       );
 
-      result.add(Container(
-        child: img,
-      ));
+      result.add(
+        GestureDetector(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return WallDownloadPage(item: element,);
+            }));
+          },
+          child: Hero(
+              tag: element.id,
+              child: img
+          )
+        ));
     });
     renderedPage++;
     return result;

@@ -19,9 +19,9 @@ class _HomePageState extends State<HomePage> {
     _controller = TextEditingController();
   }
 
-  setAndSearch(context, value) async {
+  setAndSearch(context) async {
     final prefs = await SharedPreferences.getInstance();
-    print(value);
+    String value = _controller.text;
     await prefs.setString('tagName', value);
     Navigator.push(
       context,
@@ -35,16 +35,25 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: Padding(
           padding: EdgeInsets.all(15),
-          child: TextField(
-            controller: _controller,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Search'
-            ),
-            onSubmitted: (String value) => {
-              setAndSearch(context, value)
-            },
-          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextField(
+                controller: _controller,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Search'
+                ),
+                onSubmitted: (String value) => {
+                  setAndSearch(context)
+                },
+              ),
+              ElevatedButton(
+                onPressed: () => setAndSearch(context),
+                child: const Text('Search'),
+              ),
+            ],
+          )
         ),
       ),
     );
