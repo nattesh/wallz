@@ -19,11 +19,12 @@ class _ListWallPageState extends State<ListWallPage> {
   @override
   void initState() {
     super.initState();
-    newSearch();
+
+    data = getData(1);
   }
 
   void newSearch() {
-    data = getData(1);
+    print('here');
   }
 
   @override
@@ -32,10 +33,9 @@ class _ListWallPageState extends State<ListWallPage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body:FutureBuilder(
+      body: FutureBuilder(
           future: data,
-          builder:
-              (BuildContext context, AsyncSnapshot<ApiResponse> snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<ApiResponse> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               final data = snapshot.data;
               if(data != null && data.data != null && data.data.length > 0) {

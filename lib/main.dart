@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:wallz/pages/list_walls_page.dart';
+import 'package:wallz/pages/home_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const WallzApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class WallzApp extends StatelessWidget {
+  const WallzApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
       ),
-      home: const ListWallPage(title: 'Wallz'),
+      home: const HomePage(),
       debugShowCheckedModeBanner: false,
     );
   }

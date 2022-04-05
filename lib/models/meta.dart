@@ -7,7 +7,7 @@ class Meta {
 
   int currentPage;
   int lastPage;
-  String perPage;
+  int perPage;
   int total;
   String query;
 
