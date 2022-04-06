@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
 
   setAndSearch(context) async {
     final prefs = await SharedPreferences.getInstance();
-    String value = _controller.text;
+    String value = _controller.text.trim().replaceAll(' ', '+');
     await prefs.setString('tagName', value);
     Navigator.push(
       context,
