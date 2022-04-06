@@ -12,6 +12,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   late TextEditingController _controller;
+  bool disabledBtn = true;
+  bool onlyPortrait = true;
 
   @override
   void initState() {
@@ -20,13 +22,40 @@ class _HomePageState extends State<HomePage> {
   }
 
   setAndSearch(context) async {
-    final prefs = await SharedPreferences.getInstance();
-    String value = _controller.text.trim().replaceAll(' ', '+');
+    var prefs = await SharedPreferences.getInstance();
+    String value = _controller.text;
     await prefs.setString('tagName', value);
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const ListWallPage(title: 'Wallz')),
-    );
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const ListWallPage(title: 'Wallz')),
+      );
+  }
+
+  void _reset() {
+    _controller.clear();
+    setState(() {
+      disabledBtn = _controller.text.length == 0;
+    });
+  }
+
+  void _onChange(txt) {
+    setState(() {
+      disabledBtn = txt.length == 0;
+    });
+  }
+
+  void _setPortrait(value) async {
+    var prefs = await SharedPreferences.getInstance();
+
+    if(value) {
+      prefs.setString('ratios', 'portrait');
+    } else {
+      prefs.remove('ratios');
+    }
+
+    setState(() {
+      onlyPortrait = value;
+    });
   }
 
   @override
@@ -38,18 +67,33 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Only portrait'),
+                    Switch(
+                      value: onlyPortrait,
+                      onChanged: (value) => _setPortrait(value),
+                    ),
+                  ]
+              ),
               TextField(
                 controller: _controller,
+                onChanged: (txt) => _onChange(txt),
                 decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Search'
+                  border: OutlineInputBorder(),
+                  labelText: 'Search',
+                  suffixIcon: disabledBtn ? null : IconButton(
+                    onPressed: _reset,
+                    icon: Icon(Icons.clear),
+                  ),
                 ),
                 onSubmitted: (String value) => {
                   setAndSearch(context)
                 },
               ),
               ElevatedButton(
-                onPressed: () => setAndSearch(context),
+                onPressed: disabledBtn ? () {} : () => setAndSearch(context),
                 child: const Text('Search'),
               ),
             ],

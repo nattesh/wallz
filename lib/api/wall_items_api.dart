@@ -8,7 +8,7 @@ Future<ApiResponse> getData(int page) async {
 
   final prefs = await SharedPreferences.getInstance();
 
-  var ratios = 'portrait';
+  var ratios = await prefs.getString('ratios');
   var categories = '100';
   var purity = '100';
   var sorting = 'date_added';
@@ -16,6 +16,7 @@ Future<ApiResponse> getData(int page) async {
   var apiKey = '';
 
   var tagName =  await prefs.getString('tagName');
+  tagName = tagName?.trim().replaceAll(' ', '+');
 
   var url = baseUrl + '?page=${page}';
 
@@ -25,7 +26,7 @@ Future<ApiResponse> getData(int page) async {
   if(ratios != null && ratios.isNotEmpty) {
     url += '&ratios=${ratios}';
   }
-  if(categories != null && ratios.isNotEmpty) {
+  if(categories != null && categories.isNotEmpty) {
     url += '&categories=${categories}';
   }
   if(purity != null && purity.isNotEmpty) {
