@@ -19,6 +19,11 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _controller = TextEditingController();
+
+    SharedPreferences.getInstance().then( (SharedPreferences prefs) {
+      String? prefRatio = prefs.getString('ratios');
+      onlyPortrait = prefRatio != null;
+    });
   }
 
   setAndSearch(context) async {
