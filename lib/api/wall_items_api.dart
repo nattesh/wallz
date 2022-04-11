@@ -13,6 +13,8 @@ Future<ApiResponse> getData(int page, Filters filters) async {
   var order = filters.order;
   var apiKey = '';
 
+  print(filters.sorting);
+
   var tagName =  filters.tagName;
   tagName = tagName.trim().replaceAll(' ', '+');
 
@@ -20,12 +22,18 @@ Future<ApiResponse> getData(int page, Filters filters) async {
 
   if(tagName != null && tagName.isNotEmpty) {
     url += '&q=${tagName}&sorting=relevance';
+  } else {
+    url += '&q=';
   }
+
   if(ratios != null && ratios.isNotEmpty) {
     url += '&ratios=${ratios}';
   }
   if(categories != null && categories.isNotEmpty) {
     url += '&categories=${categories}';
+  }
+  if(sorting != null && sorting.isNotEmpty) {
+    url += '&sorting=${sorting}';
   }
   if(purity != null && purity.isNotEmpty) {
     url += '&purity=${purity}';

@@ -35,6 +35,7 @@ class _ListWallPageState extends State<ListWallPage> {
           future: data,
           builder: (BuildContext context, AsyncSnapshot<ApiResponse> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
+              print('here');
               final data = snapshot.data;
               if(data != null && data.data != null && data.data.length > 0) {
                 return ListWalls(walls: data.data, onePage: data.meta.lastPage == 1, filters: widget.filters,);

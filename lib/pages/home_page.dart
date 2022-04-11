@@ -21,14 +21,39 @@ class _HomePageState extends State<HomePage> {
     _controller = TextEditingController();
   }
 
-  setAndSearch(context) async {
+  _searchByTagName(BuildContext context) {
     String value = _controller.text;
     Filters filters = new Filters(
         onlyPortrait ? 'portrait' : '',
-        '100', '100', 'relevance', 'date_added', '', value);
+        '100', '100', 'relevance', '', '', value);
+    _search(context, filters, filters.tagName);
+  }
+
+  _searchLatest(BuildContext context) {
+    Filters filters = new Filters(
+        onlyPortrait ? 'portrait' : '',
+        '100', '100', 'date_added', '', '', '');
+    _search(context, filters, 'Latest');
+  }
+
+  _searchToplist(BuildContext context) {
+    Filters filters = new Filters(
+        onlyPortrait ? 'portrait' : '',
+        '100', '100', 'toplist', '', '', '');
+    _search(context, filters, 'Toplist');
+  }
+
+  _searchRandom(BuildContext context) {
+    Filters filters = new Filters(
+        onlyPortrait ? 'portrait' : '',
+        '100', '100', 'random', '', '', '');
+    _search(context, filters, 'Random');
+  }
+
+  _search(BuildContext context, Filters filters, String title) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ListWallPage(title: 'Wallz', filters: filters,)),
+      MaterialPageRoute(builder: (context) => ListWallPage(title: title, filters: filters,)),
     );
   }
 
@@ -53,46 +78,120 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.all(15),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Only portrait'),
-                    Switch(
-                      value: onlyPortrait,
-                      onChanged: (value) => _setPortrait(value),
-                    ),
-                  ]
-              ),
-              TextField(
-                controller: _controller,
-                onChanged: (txt) => _onChange(txt),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Search',
-                  suffixIcon: disabledBtn ? null : IconButton(
-                    onPressed: _reset,
-                    icon: Icon(Icons.clear),
+    return Scaffold (
+      appBar: AppBar(
+        title: Text('Wallz'),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width * 0.33,
+                  child: Column (
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        iconSize: 50,
+                        color: Colors.blueAccent,
+                        icon: Icon(Icons.punch_clock),
+                        onPressed: () => {
+                          _searchLatest(context)
+                        },
+                      ),
+                      Text('Latest')
+                    ],
+                  )
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width * 0.33,
+                  child: Column (
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        iconSize: 50,
+                        color: Colors.redAccent,
+                        icon: Icon(Icons.diamond),
+                        onPressed: () {
+                          _searchToplist(context);
+                        },
+                      ),
+                      Text('Toplist')
+                    ],
                   ),
                 ),
-                onSubmitted: (String value) => {
-                  setAndSearch(context)
-                },
-              ),
-              ElevatedButton(
-                onPressed: disabledBtn ? () {} : () => setAndSearch(context),
-                child: const Text('Search'),
-              ),
-            ],
+                Container(
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width * 0.33,
+                  child: Column (
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        iconSize: 50,
+                        color: Colors.amber,
+                        icon: Icon(Icons.shuffle),
+                        onPressed: () {
+                          _searchRandom(context);
+                        },
+                      ),
+                      Text('Random')
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          Container (
+              height: 200,
+              child: Padding(
+                padding: EdgeInsets.all(15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Only portrait'),
+                          Switch(
+                            activeColor: Colors.blueAccent,
+                            value: onlyPortrait,
+                            onChanged: (value) => _setPortrait(value),
+                          ),
+                        ]
+                    ),
+                    TextField(
+                      controller: _controller,
+                      onChanged: (txt) => _onChange(txt),
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Search',
+                        suffixIcon: disabledBtn ? null : IconButton(
+                          onPressed: _reset,
+                          icon: Icon(Icons.clear),
+                        ),
+                      ),
+                      onSubmitted: (String value) => {
+                        _searchByTagName(context)
+                      },
+                    ),
+                    ElevatedButton(
+                      onPressed: disabledBtn ? () {} : () => _searchByTagName(context),
+                      child: const Text('Search'),
+                    ),
+                  ],
+                ),
+              )
+          ),
+          Expanded(
+            child: Row(
+            ),
           )
-        ),
-      ),
+        ],
+      )
     );
   }
 }
