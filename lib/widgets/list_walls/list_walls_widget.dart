@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:wallz/models/wall_item.dart';
 import 'package:wallz/api/wall_items_api.dart';
 import 'package:wallz/pages/wall_download_page.dart';
+import 'package:wallz/models/filters.dart';
 
 class ListWalls extends StatefulWidget {
 
-  const ListWalls({Key? key, required this.walls, required this.onePage}) : super(key: key);
+  const ListWalls({Key? key, required this.walls, required this.onePage, required this.filters}) : super(key: key);
 
   final List<WallItem> walls;
   final bool onePage;
+  final Filters filters;
 
   @override
   State<ListWalls> createState() => _ListWallsState();
@@ -46,7 +48,7 @@ class _ListWallsState extends State<ListWalls> {
 
   void loadNewPage() async {
     requestPage++;
-    var res = await getData(requestPage);
+    var res = await getData(requestPage, widget.filters);
     isLastPage = requestPage == res.meta.lastPage;
     _addItems(res.data, isLastPage);
   }

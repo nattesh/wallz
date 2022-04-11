@@ -37,8 +37,8 @@ dependencies:
   json_serializable: ^6.1.5
   build_runner: ^2.1.8
   http: ^0.13.4
-  shared_preferences: ^2.0.0-nullsafety
   gallery_saver: ^2.3.2
+  shared_preferences: ^2.0.0-nullsafety
 
 dev_dependencies:
   flutter_test:

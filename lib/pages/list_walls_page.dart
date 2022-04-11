@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:wallz/api/wall_items_api.dart';
 import 'package:wallz/models/api_response.dart';
+import 'package:wallz/models/filters.dart';
 import 'package:wallz/widgets/list_walls/list_walls_widget.dart';
 
 class ListWallPage extends StatefulWidget {
-  const ListWallPage({Key? key, required this.title}) : super(key: key);
+  const ListWallPage({Key? key, required this.title, required this.filters}) : super(key: key);
 
   final String title;
+  final Filters filters;
 
   @override
   State<ListWallPage> createState() => _ListWallPageState();
@@ -20,11 +22,7 @@ class _ListWallPageState extends State<ListWallPage> {
   void initState() {
     super.initState();
 
-    data = getData(1);
-  }
-
-  void newSearch() {
-    print('here');
+    data = getData(1, widget.filters);
   }
 
   @override
@@ -39,7 +37,7 @@ class _ListWallPageState extends State<ListWallPage> {
             if (snapshot.connectionState == ConnectionState.done) {
               final data = snapshot.data;
               if(data != null && data.data != null && data.data.length > 0) {
-                return ListWalls(walls: data.data, onePage: data.meta.lastPage == 1,);
+                return ListWalls(walls: data.data, onePage: data.meta.lastPage == 1, filters: widget.filters,);
               } else {
                 return Center(child: Text('No results found'));
               }

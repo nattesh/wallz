@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wallz/pages/list_walls_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wallz/models/filters.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,21 +19,17 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _controller = TextEditingController();
-
-    SharedPreferences.getInstance().then( (SharedPreferences prefs) {
-      String? prefRatio = prefs.getString('ratios');
-      onlyPortrait = prefRatio != null;
-    });
   }
 
   setAndSearch(context) async {
-    var prefs = await SharedPreferences.getInstance();
     String value = _controller.text;
-    await prefs.setString('tagName', value);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const ListWallPage(title: 'Wallz')),
-      );
+    Filters filters = new Filters(
+        onlyPortrait ? 'portrait' : '',
+        '100', '100', 'relevance', 'date_added', '', value);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ListWallPage(title: 'Wallz', filters: filters,)),
+    );
   }
 
   void _reset() {
@@ -50,14 +46,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _setPortrait(value) async {
-    var prefs = await SharedPreferences.getInstance();
-
-    if(value) {
-      prefs.setString('ratios', 'portrait');
-    } else {
-      prefs.remove('ratios');
-    }
-
     setState(() {
       onlyPortrait = value;
     });
