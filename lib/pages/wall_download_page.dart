@@ -15,18 +15,9 @@ class WallDownloadPage extends StatefulWidget {
 
 class _WallDownloadPageState extends State<WallDownloadPage> {
 
-  TransformationController _controller = TransformationController();
-  bool isPortrait = true;
-  int x = 0;
-  int y = 0;
-
-
   @override
   void initState() {
     super.initState();
-    x = widget.item.dimensionX;
-    y = widget.item.dimensionY;
-    bool isPortrait = y > x;
   }
 
   void _saveNetworkImage(BuildContext context) async {
@@ -42,31 +33,6 @@ class _WallDownloadPageState extends State<WallDownloadPage> {
         content: const Text('Downloaded'),
         action: SnackBarAction(label: 'Hide', onPressed: scaffold.hideCurrentSnackBar),
       ),
-    );
-  }
-
-  Widget imageWidget(BuildContext context) {
-    return Image.network(
-      widget.item.path,
-      height: MediaQuery.of(context).size.height,
-      loadingBuilder: (BuildContext context, Widget child,
-          ImageChunkEvent? loadingProgress) {
-        if (loadingProgress == null) {
-          return child;
-        }
-        return Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: Center(
-              child: CircularProgressIndicator(
-                value: loadingProgress.expectedTotalBytes != null
-                    ? loadingProgress.cumulativeBytesLoaded /
-                    loadingProgress.expectedTotalBytes!
-                    : null,
-              ),
-            )
-        );
-      },
     );
   }
 
