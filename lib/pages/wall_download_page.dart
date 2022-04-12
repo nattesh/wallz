@@ -40,17 +40,29 @@ class _WallDownloadPageState extends State<WallDownloadPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: PhotoView(
-          initialScale: PhotoViewComputedScale.covered * 1.0,
-          enableRotation: false,
-          enablePanAlways: false,
-          imageProvider: CachedNetworkImageProvider(widget.item.path),
+        child: Stack(
+          children: [
+            PhotoView(
+              initialScale: PhotoViewComputedScale.covered * 1.0,
+              enableRotation: false,
+              enablePanAlways: false,
+              imageProvider: CachedNetworkImageProvider(widget.item.path),
+            ),
+            /*Container(
+              alignment: Alignment.bottomCenter,
+              height: MediaQuery.of(context).size.height / 2,
+              child: Card(
+                child: Text('Test')
+              ),
+            )*/
+          ],
         )
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () => _saveNetworkImage(context),
           child: const Icon(Icons.downloading),
-          backgroundColor: Colors.blueAccent,
+          backgroundColor: Colors.blueGrey,
+          foregroundColor: Colors.white,
       ),
     );
   }
