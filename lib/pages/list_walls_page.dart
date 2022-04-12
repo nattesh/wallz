@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wallz/api/wall_items_api.dart';
 import 'package:wallz/models/api_response.dart';
 import 'package:wallz/models/filters.dart';
-import 'package:wallz/widgets/list_walls/list_walls_widget.dart';
+import 'package:wallz/widgets/list_walls_widget.dart';
 
 class ListWallPage extends StatefulWidget {
   const ListWallPage({Key? key, required this.title, required this.filters}) : super(key: key);
@@ -21,7 +21,6 @@ class _ListWallPageState extends State<ListWallPage> {
   @override
   void initState() {
     super.initState();
-
     data = getData(1, widget.filters);
   }
 

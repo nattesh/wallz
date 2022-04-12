@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold (
+    return Scaffold(
       appBar: AppBar(
         title: Text('Wallz'),
       ),
@@ -187,7 +187,16 @@ class _HomePageState extends State<HomePage> {
               )
           ),
           Expanded(
-            child: Row(
+            child: Padding(
+              padding: EdgeInsets.all(30),
+              child: Column(
+                children: [
+
+                  Padding(
+                    padding: EdgeInsets.all(10),
+                  ),
+                ],
+              ),
             ),
           )
         ],
