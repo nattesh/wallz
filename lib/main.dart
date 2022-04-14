@@ -10,17 +10,23 @@ class WallzApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Wallz',
-      theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: MaterialApp(
+        title: 'Wallz',
+        theme: ThemeData(
+          primarySwatch: Colors.blueGrey,
+        ),
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+        ),
+        themeMode: ThemeMode.dark,
+        home: const HomePage(),
+        debugShowCheckedModeBanner: false,
       ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-      ),
-      themeMode: ThemeMode.dark,
-      home: const HomePage(),
-      debugShowCheckedModeBanner: false,
     );
   }
 }
