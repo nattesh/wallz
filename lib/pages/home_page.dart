@@ -157,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           Text('Only portrait'),
                           Switch(
-                            activeColor: Colors.blueAccent,
+                            activeColor: Colors.blueGrey,
                             value: onlyPortrait,
                             onChanged: (value) => _setPortrait(value),
                           ),
@@ -181,6 +181,9 @@ class _HomePageState extends State<HomePage> {
                     ElevatedButton(
                       onPressed: disabledBtn ? () {} : () => _searchByTagName(context),
                       child: const Text('Search'),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.blueGrey),
+                      ),
                     ),
                   ],
                 ),
