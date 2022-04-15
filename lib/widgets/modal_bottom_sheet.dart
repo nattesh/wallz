@@ -5,6 +5,7 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:wallz/models/tag.dart';
 import 'package:wallz/models/filters.dart';
 import 'package:wallz/pages/list_walls_page.dart';
+import 'package:wallz/utils/extensions.dart';
 
 class ModalBottomSheet extends StatefulWidget {
   const ModalBottomSheet({Key? key, required DetailsData this.details}) : super(key: key);
@@ -52,10 +53,16 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
     );
   }
 
-  _searchByColors(List<String> colors, BuildContext context) {
+  _searchByColor(String color, BuildContext context) {
     Filters filters = new Filters('portrait',
-        '100', '100', '', '', colors[0].replaceAll('#', ''), '', '');
-    _search(context, filters, 'By colors');
+        '100', '100', '', '', color.replaceAll('#', ''), '');
+    _search(context, filters, 'By color');
+  }
+
+  _searchByTag(String tag, BuildContext context) {
+    Filters filters = new Filters('portrait',
+        '100', '100', '', '', '', tag);
+    _search(context, filters, tag.capitalize());
   }
 
   List<Widget> _renderColors(List<String> colors, BuildContext context) {
@@ -64,35 +71,40 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
       String cleaned = c.replaceAll('#', '');
       String parsed = '0xFF' + cleaned;
       rendered.add(
-          Container(
-            width: 50,
-            height: 20,
-            margin: EdgeInsets.all(2),
+        Padding (
+          padding: EdgeInsets.only(right: 5),
+          child: RaisedButton(
+            onPressed: () => _searchByColor(c, context),
+            textColor: Color(int.parse(parsed)),
             color: Color(int.parse(parsed)),
-          )
+          ),
+        ),
       );
     });
-    rendered.add(
-      IconButton(
-        onPressed: () => _searchByColors(colors, context),
-        icon: Icon(
-          Icons.search
-        ),
-      )
-    );
     return rendered;
   }
 
-  List<Widget> _renderTags(List<Tag> tags) {
+  List<Widget> _renderTags(List<Tag> tags, BuildContext context) {
     List<Widget> rendered = [];
     tags.forEach((t) {
       rendered.add(
-          Text(' #' + t.name,
-            style: TextStyle(
-              color: Colors.white,
-            ),
+        ElevatedButton(
+          child: Text(t.name),
+          onPressed: () => _searchByTag(t.name, context),
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                  side: BorderSide(color: Colors.white)
+              )
+            )
           )
+        )
       );
+      rendered.add(Padding(
+        padding: EdgeInsets.all(3),
+      ));
     });
     return rendered;
   }
@@ -103,7 +115,9 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
         height: 50,
         child:
           Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              color: Colors.white,
+            ),
           )
       );
     } else {
@@ -120,17 +134,17 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
         );
       } else {
         return ElevatedButton(
-            child: Text('DOWNLOAD'),
-            onPressed: () => _saveNetworkImage(context),
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                        side: BorderSide(color: Colors.blueAccent)
-                    )
-                )
+          child: Text('DOWNLOAD'),
+          onPressed: () => _saveNetworkImage(context),
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.blueGrey),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                  side: BorderSide(color: Colors.white)
+              )
             )
+          )
         );
       }
     }
@@ -215,23 +229,32 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                 Container(
                   padding: EdgeInsets.fromLTRB(15, 15, 15, 5),
                   width: MediaQuery.of(context).size.width,
-                  child: Text('Resolution' + ': ' + widget.details.resolution,
-                    style: TextStyle(
-                        fontSize: 15
-                    ),
-                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.photo_size_select_actual_outlined
+                      ),
+                      Text(' ' + widget.details.resolution,
+                        style: TextStyle(
+                            fontSize: 15
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(15),
+                      ),
+                      Icon(
+                          Icons.calendar_today
+                      ),
+                      Text(' ' + DateFormat('dd-MM-yyyy').format(widget.details.createdAt),
+                        style: TextStyle(
+                            fontSize: 15
+                        ),
+                      ),
+                    ],
+                  )
                 ),
                 Container(
-                  padding: EdgeInsets.all(15),
-                  width: MediaQuery.of(context).size.width,
-                  child: Text('Created at' + ': ' + DateFormat('dd-MM-yyyy').format(widget.details.createdAt),
-                    style: TextStyle(
-                        fontSize: 15
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                  padding: EdgeInsets.fromLTRB(15, 15, 15, 5),
                   width: MediaQuery.of(context).size.width,
                   child: Text('Colors' + ': ',
                     style: TextStyle(
@@ -240,11 +263,14 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                   ),
                 ),
                 Container(
-                    padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-                    width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
+                  width: MediaQuery.of(context).size.width,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
                     child: Row(
                       children: _renderColors(widget.details.colors, context),
-                    )
+                    ),
+                  ),
                 ),
                 Container(
                   padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
@@ -256,16 +282,12 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                  padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
                   width: MediaQuery.of(context).size.width,
-                  child: SizedBox(
-                    height: 50,
-                    child: SingleChildScrollView(
-                      child: Wrap(
-                        runSpacing: 2,
-                        spacing: 1,
-                        children: _renderTags(widget.details.tags),
-                      ),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: _renderTags(widget.details.tags, context),
                     ),
                   )
                 ),

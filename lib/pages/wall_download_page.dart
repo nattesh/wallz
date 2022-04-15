@@ -34,7 +34,9 @@ class _WallDownloadPageState extends State<WallDownloadPage> {
         child: Stack(
           children: [
             Center(
-              child: CircularProgressIndicator()
+              child: CircularProgressIndicator(
+                color: Colors.blueGrey,
+              )
             ),
             PhotoView(
               initialScale: PhotoViewComputedScale.covered * 1.0,

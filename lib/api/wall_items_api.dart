@@ -50,7 +50,6 @@ Future<ApiResponse> getData(int page, Filters filters) async {
     url += '&colors=${colors}';
   }
 
-  print(url);
   final response = await http.get(Uri.parse(url));
   return ApiResponse.fromJson(jsonDecode(response.body));
 }

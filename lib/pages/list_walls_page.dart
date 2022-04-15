@@ -24,11 +24,27 @@ class _ListWallPageState extends State<ListWallPage> {
     data = getData(1, widget.filters);
   }
 
+  _goHome(BuildContext context) {
+    Navigator.of(context).popUntil((route) => route.isFirst );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: widget.filters.colors.isNotEmpty ?
+      Color(int.parse('0xff' + widget.filters.colors))
+          : null,
       appBar: AppBar(
         title: Text(widget.title),
+        backgroundColor: widget.filters.colors.isNotEmpty ?
+          Color(int.parse('0xff' + widget.filters.colors))
+          : null,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.home),
+            onPressed: () => _goHome(context),
+          )
+        ],
       ),
       body: FutureBuilder(
           future: data,
@@ -41,7 +57,9 @@ class _ListWallPageState extends State<ListWallPage> {
                 return Center(child: Text('No results found'));
               }
             } else {
-              return Center(child: CircularProgressIndicator());
+              return Center(child: CircularProgressIndicator(
+                color: Colors.blueGrey,
+              ));
             }
           }),// This trailing comma makes auto-formatting nicer for build methods.
     );

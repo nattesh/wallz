@@ -13,7 +13,6 @@ Filters _$FiltersFromJson(Map<String, dynamic> json) => Filters(
       json['sorting'] as String,
       json['order'] as String,
       json['colors'] as String,
-      json['api_key'] as String,
       json['tag_name'] as String,
     );
 
@@ -24,6 +23,5 @@ Map<String, dynamic> _$FiltersToJson(Filters instance) => <String, dynamic>{
       'sorting': instance.sorting,
       'order': instance.order,
       'colors': instance.colors,
-      'api_key': instance.apiKey,
       'tag_name': instance.tagName,
     };

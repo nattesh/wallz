@@ -11,11 +11,10 @@ class Filters {
   String sorting = 'date_added';
   String order = 'desc';
   String colors = '';
-  String apiKey = '';
   String tagName =  '';
 
-  Filters(this.ratios, this.categories, this.purity, this.sorting, this.order, this.colors,
-      this.apiKey, this.tagName);
+  Filters(this.ratios, this.categories, this.purity, this.sorting, this.order,
+      this.colors, this.tagName);
 
   factory Filters.fromJson(Map<String, dynamic> json) => _$FiltersFromJson(json);
   Map<String, dynamic> toJson() => _$FiltersToJson(this);
