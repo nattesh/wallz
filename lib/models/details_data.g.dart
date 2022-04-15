@@ -1,13 +1,16 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'item_details.dart';
+part of 'details_data.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ItemDetails _$ItemDetailsFromJson(Map<String, dynamic> json) => ItemDetails(
-      DetailData.fromJson(json['data'] as Map<String, dynamic>),
+DetailsData _$DetailsDataFromJson(Map<String, dynamic> json) => DetailsData(
+      json['id'] as String,
+      json['url'] as String,
+      json['short_url'] as String,
+      Uploader.fromJson(json['uploader'] as Map<String, dynamic>),
       json['views'] as int,
       json['favorites'] as int,
       json['source'] as String,
@@ -28,9 +31,12 @@ ItemDetails _$ItemDetailsFromJson(Map<String, dynamic> json) => ItemDetails(
           .toList(),
     );
 
-Map<String, dynamic> _$ItemDetailsToJson(ItemDetails instance) =>
+Map<String, dynamic> _$DetailsDataToJson(DetailsData instance) =>
     <String, dynamic>{
-      'data': instance.data,
+      'id': instance.id,
+      'url': instance.url,
+      'short_url': instance.shortUrl,
+      'uploader': instance.uploader,
       'views': instance.views,
       'favorites': instance.favorites,
       'source': instance.source,

@@ -3,6 +3,8 @@ import 'package:wallz/models/wall_item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:wallz/widgets/modal_bottom_sheet.dart';
+import 'package:wallz/models/api_details_response.dart';
+import 'package:wallz/api/wall_items_api.dart';
 
 class WallDownloadPage extends StatefulWidget {
   const WallDownloadPage({Key? key, required this.item}) : super(key: key);
@@ -15,9 +17,14 @@ class WallDownloadPage extends StatefulWidget {
 
 class _WallDownloadPageState extends State<WallDownloadPage> {
 
+  late ApiDetailsResponse responseDetails;
+
   @override
   void initState() {
     super.initState();
+    getDetails(widget.item.id).then((res) {
+      responseDetails = res;
+    });
   }
 
   @override
@@ -43,7 +50,7 @@ class _WallDownloadPageState extends State<WallDownloadPage> {
         onPressed: () {
           showModalBottomSheet<void>(
             context: context,
-            builder: (_) => ModalBottomSheet(item: widget.item,),
+            builder: (_) => ModalBottomSheet(details: responseDetails.data,),
           );
         },
         child: const Icon(Icons.info),

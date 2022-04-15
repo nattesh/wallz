@@ -1,5 +1,5 @@
 import 'package:wallz/models/api_response.dart';
-import 'package:wallz/models/item_details.dart';
+import 'package:wallz/models/api_details_response.dart';
 import 'package:wallz/models/filters.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' show jsonDecode;
@@ -51,7 +51,7 @@ Future<ApiResponse> getData(int page, Filters filters) async {
   return ApiResponse.fromJson(jsonDecode(response.body));
 }
 
-Future<ItemDetails> getDetails(String id) async {
+Future<ApiDetailsResponse> getDetails(String id) async {
   final response = await http.get(Uri.parse(detailById + id));
-  return ItemDetails.fromJson(jsonDecode(response.body));
+  return ApiDetailsResponse.fromJson(jsonDecode(response.body));
 }

@@ -1,14 +1,18 @@
+import 'package:wallz/models/uploader.dart';
+import 'package:wallz/models/thumbs.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wallz/models/detail_data.dart';
 import 'package:wallz/models/thumbs.dart';
 import 'package:wallz/models/tag.dart';
 
-part 'item_details.g.dart';
+part 'details_data.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class ItemDetails {
+class DetailsData {
 
-  DetailData data;
+  String id;
+  String url;
+  String shortUrl;
+  Uploader uploader;
   int views;
   int favorites;
   String source;
@@ -26,8 +30,12 @@ class ItemDetails {
   Thumbs thumbs;
   List<Tag> tags;
 
-  ItemDetails(
-      this.data,
+
+  DetailsData(
+      this.id,
+      this.url,
+      this.shortUrl,
+      this.uploader,
       this.views,
       this.favorites,
       this.source,
@@ -45,6 +53,6 @@ class ItemDetails {
       this.thumbs,
       this.tags);
 
-  factory ItemDetails.fromJson(Map<String, dynamic> json) => _$ItemDetailsFromJson(json);
-  Map<String, dynamic> toJson() => _$ItemDetailsToJson(this);
+  factory DetailsData.fromJson(Map<String, dynamic> json) => _$DetailsDataFromJson(json);
+  Map<String, dynamic> toJson() => _$DetailsDataToJson(this);
 }

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:wallz/models/wall_item.dart';
+import 'package:wallz/models/details_data.dart';
 import 'package:intl/intl.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:wallz/models/tag.dart';
 
 class ModalBottomSheet extends StatefulWidget {
-  const ModalBottomSheet({Key? key, required WallItem this.item}) : super(key: key);
+  const ModalBottomSheet({Key? key, required DetailsData this.details}) : super(key: key);
 
-  final WallItem item;
+  final DetailsData details;
 
   @override
   State<ModalBottomSheet> createState() => _ModalBottomSheetState();
@@ -24,7 +25,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
 
   void _saveNetworkImage(BuildContext context) async {
     _startDownloading();
-    String path = widget.item.path;
+    String path = widget.details.path;
     await GallerySaver.saveImage(path);
     _endDownloading();
   }
@@ -53,6 +54,20 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
             height: 20,
             margin: EdgeInsets.all(2),
             color: Color(int.parse(parsed)),
+          )
+      );
+    });
+    return rendered;
+  }
+
+  List<Widget> _renderTags(List<Tag> tags) {
+    List<Widget> rendered = [];
+    tags.forEach((t) {
+      rendered.add(
+          Text(' #' + t.name,
+            style: TextStyle(
+              color: Colors.white,
+            ),
           )
       );
     });
@@ -101,7 +116,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 330,
+      height: MediaQuery.of(context).size.height * 8 / 5,
       color: Colors.blueGrey,
       child: Stack(
           children: [
@@ -127,9 +142,57 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                   ),
                 ),
                 Container(
+                  padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
+                      children: [
+                        Text('Uploader' + ': ',
+                          style: TextStyle(
+                              fontSize: 15
+                          ),
+                        ),
+                        Container(
+                          width: 50,
+                          height: 32,
+                          child: Image.network(widget.details.uploader.avatar.large),
+                        ),
+                        Text(' ' + widget.details.uploader.username,
+                          style: TextStyle(
+                              fontSize: 15
+                          ),
+                        ),
+                      ],
+                  )
+                ),
+                Container(
                   padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
                   width: MediaQuery.of(context).size.width,
-                  child: Text('Resolution' + ': ' + widget.item.resolution,
+                  child: Row (
+                    children: [
+                      Icon(
+                        Icons.thumb_up
+                      ),
+                      Text(' ' + widget.details.favorites.toString() + '    ',
+                        style: TextStyle(
+                            fontSize: 15
+                        ),
+                      ),
+                      Icon(
+                          Icons.remove_red_eye_sharp
+                      ),
+                      Text(' ' + widget.details.views.toString() + '  ',
+                        style: TextStyle(
+                            fontSize: 15
+                        ),
+                      )
+                    ],
+
+                  )
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(15, 15, 15, 5),
+                  width: MediaQuery.of(context).size.width,
+                  child: Text('Resolution' + ': ' + widget.details.resolution,
                     style: TextStyle(
                         fontSize: 15
                     ),
@@ -138,7 +201,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                 Container(
                   padding: EdgeInsets.all(15),
                   width: MediaQuery.of(context).size.width,
-                  child: Text('Created at' + ': ' + DateFormat('dd-MM-yyyy').format(widget.item.createdAt),
+                  child: Text('Created at' + ': ' + DateFormat('dd-MM-yyyy').format(widget.details.createdAt),
                     style: TextStyle(
                         fontSize: 15
                     ),
@@ -157,8 +220,31 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                     padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
                     width: MediaQuery.of(context).size.width,
                     child: Row(
-                      children: _renderColors(widget.item.colors),
+                      children: _renderColors(widget.details.colors),
                     )
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                  width: MediaQuery.of(context).size.width,
+                  child: Text('Tags' + ': ',
+                    style: TextStyle(
+                        fontSize: 15
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                  width: MediaQuery.of(context).size.width,
+                  child: SizedBox(
+                    height: 50,
+                    child: SingleChildScrollView(
+                      child: Wrap(
+                        runSpacing: 2,
+                        spacing: 1,
+                        children: _renderTags(widget.details.tags),
+                      ),
+                    ),
+                  )
                 ),
               ],
             ),
