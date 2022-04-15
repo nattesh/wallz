@@ -25,28 +25,28 @@ class _HomePageState extends State<HomePage> {
     String value = _controller.text;
     Filters filters = new Filters(
         onlyPortrait ? 'portrait' : '',
-        '100', '100', 'relevance', '', '', value);
+        '100', '100', 'relevance', '', '', '', value);
     _search(context, filters, filters.tagName);
   }
 
   _searchLatest(BuildContext context) {
     Filters filters = new Filters(
         onlyPortrait ? 'portrait' : '',
-        '100', '100', 'date_added', '', '', '');
+        '100', '100', 'date_added', '', '', '', '');
     _search(context, filters, 'Latest');
   }
 
   _searchToplist(BuildContext context) {
     Filters filters = new Filters(
         onlyPortrait ? 'portrait' : '',
-        '100', '100', 'toplist', '', '', '');
+        '100', '100', 'toplist', '', '', '', '');
     _search(context, filters, 'Toplist');
   }
 
   _searchRandom(BuildContext context) {
     Filters filters = new Filters(
         onlyPortrait ? 'portrait' : '',
-        '100', '100', 'random', '', '', '');
+        '100', '100', 'random', '', '', '', '');
     _search(context, filters, 'Random');
   }
 

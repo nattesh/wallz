@@ -12,6 +12,7 @@ Future<ApiResponse> getData(int page, Filters filters) async {
   var purity = filters.purity;
   var sorting = filters.sorting;
   var order = filters.order;
+  var colors = filters.colors;
   var apiKey = '';
 
   print(filters.sorting);
@@ -44,6 +45,9 @@ Future<ApiResponse> getData(int page, Filters filters) async {
   }
   if(apiKey != null && apiKey.isNotEmpty) {
     url += '&apikey=${apiKey}';
+  }
+  if(colors != null && colors.isNotEmpty) {
+    url += '&colors=${colors}';
   }
 
   print(url);

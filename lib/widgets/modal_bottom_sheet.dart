@@ -3,6 +3,8 @@ import 'package:wallz/models/details_data.dart';
 import 'package:intl/intl.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:wallz/models/tag.dart';
+import 'package:wallz/models/filters.dart';
+import 'package:wallz/pages/list_walls_page.dart';
 
 class ModalBottomSheet extends StatefulWidget {
   const ModalBottomSheet({Key? key, required DetailsData this.details}) : super(key: key);
@@ -43,7 +45,20 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
     });
   }
 
-  List<Widget> _renderColors(List<String> colors) {
+  _search(BuildContext context, Filters filters, String title) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ListWallPage(title: title, filters: filters,)),
+    );
+  }
+
+  _searchByColors(List<String> colors, BuildContext context) {
+    Filters filters = new Filters('portrait',
+        '100', '100', '', '', colors[0].replaceAll('#', ''), '', '');
+    _search(context, filters, 'By colors');
+  }
+
+  List<Widget> _renderColors(List<String> colors, BuildContext context) {
     List<Widget> rendered = [];
     colors.forEach((c) {
       String cleaned = c.replaceAll('#', '');
@@ -57,6 +72,14 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
           )
       );
     });
+    rendered.add(
+      IconButton(
+        onPressed: () => _searchByColors(colors, context),
+        icon: Icon(
+          Icons.search
+        ),
+      )
+    );
     return rendered;
   }
 
@@ -220,7 +243,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                     padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
                     width: MediaQuery.of(context).size.width,
                     child: Row(
-                      children: _renderColors(widget.details.colors),
+                      children: _renderColors(widget.details.colors, context),
                     )
                 ),
                 Container(
