@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wallz/models/wall_item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:wallz/widgets/modal_bottom_sheet.dart';
+import 'package:wallz/widgets/details_bottom_sheet.dart';
 import 'package:wallz/models/api_details_response.dart';
 import 'package:wallz/api/wall_items_api.dart';
 
@@ -52,7 +52,7 @@ class _WallDownloadPageState extends State<WallDownloadPage> {
         onPressed: () {
           showModalBottomSheet<void>(
             context: context,
-            builder: (_) => ModalBottomSheet(details: responseDetails.data,),
+            builder: (_) => DetailsBottomSheet(details: responseDetails.data,),
           );
         },
         child: const Icon(Icons.info),

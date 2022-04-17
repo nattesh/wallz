@@ -6,17 +6,18 @@ import 'package:wallz/models/tag.dart';
 import 'package:wallz/models/filters.dart';
 import 'package:wallz/pages/list_walls_page.dart';
 import 'package:wallz/utils/extensions.dart';
+import 'package:wallz/models/query_filter.dart';
 
-class ModalBottomSheet extends StatefulWidget {
-  const ModalBottomSheet({Key? key, required DetailsData this.details}) : super(key: key);
+class DetailsBottomSheet extends StatefulWidget {
+  const DetailsBottomSheet({Key? key, required DetailsData this.details}) : super(key: key);
 
   final DetailsData details;
 
   @override
-  State<ModalBottomSheet> createState() => _ModalBottomSheetState();
+  State<DetailsBottomSheet> createState() => _DetailsBottomSheetState();
 }
 
-class _ModalBottomSheetState extends State<ModalBottomSheet> {
+class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
 
   bool downloading = false;
   bool done = false;
@@ -54,15 +55,24 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
   }
 
   _searchByColor(String color, BuildContext context) {
+    QueryFilter query = QueryFilter('', '', '');
     Filters filters = new Filters('portrait',
-        '100', '100', '', '', color.replaceAll('#', ''), '');
+        '100', '100', '', '', color.replaceAll('#', ''), query);
     _search(context, filters, 'By color');
   }
 
   _searchByTag(String tag, BuildContext context) {
+    QueryFilter query = QueryFilter(tag, '', '');
     Filters filters = new Filters('portrait',
-        '100', '100', '', '', '', tag);
+        '100', '100', '', '', '', query);
     _search(context, filters, tag.capitalize());
+  }
+
+  _searchForSimilar(String like, BuildContext context) {
+    QueryFilter query = QueryFilter('', '', like);
+    Filters filters = new Filters('portrait',
+        '100', '100', '', '', '', query);
+    _search(context, filters, 'Similar');
   }
 
   List<Widget> _renderColors(List<String> colors, BuildContext context) {
@@ -221,31 +231,11 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                         style: TextStyle(
                             fontSize: 15
                         ),
-                      )
-                    ],
-
-                  )
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(15, 15, 15, 5),
-                  width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    children: [
+                      ),
                       Icon(
-                        Icons.photo_size_select_actual_outlined
+                          Icons.photo_size_select_actual_outlined
                       ),
                       Text(' ' + widget.details.resolution,
-                        style: TextStyle(
-                            fontSize: 15
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(15),
-                      ),
-                      Icon(
-                          Icons.calendar_today
-                      ),
-                      Text(' ' + DateFormat('dd-MM-yyyy').format(widget.details.createdAt),
                         style: TextStyle(
                             fontSize: 15
                         ),
@@ -291,6 +281,30 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                     ),
                   )
                 ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(15, 10, 15, 5),
+                  width: MediaQuery.of(context).size.width,
+                  child: Center(
+                    child: ElevatedButton(
+                      onPressed: () => _searchForSimilar(widget.details.id.toString(), context),
+                      child: Row(
+                        children: [
+                          Icon(Icons.search),
+                          Text(' Search for similar'),
+                        ],
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: Colors.white)
+                          )
+                        )
+                      ),
+                    ),
+                  )
+                )
               ],
             ),
             Container(

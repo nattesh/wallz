@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wallz/pages/list_walls_page.dart';
 import 'package:wallz/models/filters.dart';
+import 'package:wallz/models/query_filter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,30 +24,34 @@ class _HomePageState extends State<HomePage> {
 
   _searchByTagName(BuildContext context) {
     String value = _controller.text;
+    QueryFilter query = QueryFilter(value, '', '');
     Filters filters = new Filters(
         onlyPortrait ? 'portrait' : '',
-        '100', '100', 'relevance', '', '', value);
-    _search(context, filters, filters.tagName);
+        '100', '100', 'relevance', '', '', query);
+    _search(context, filters, query.tagName);
   }
 
   _searchLatest(BuildContext context) {
+    QueryFilter query = QueryFilter('', '', '');
     Filters filters = new Filters(
         onlyPortrait ? 'portrait' : '',
-        '100', '100', 'date_added', '', '', '');
+        '100', '100', 'date_added', '', '', query);
     _search(context, filters, 'Latest');
   }
 
   _searchToplist(BuildContext context) {
+    QueryFilter query = QueryFilter('', '', '');
     Filters filters = new Filters(
         onlyPortrait ? 'portrait' : '',
-        '100', '100', 'toplist', '', '', '');
+        '100', '100', 'toplist', '', '', query);
     _search(context, filters, 'Toplist');
   }
 
   _searchRandom(BuildContext context) {
+    QueryFilter query = QueryFilter('', '', '');
     Filters filters = new Filters(
         onlyPortrait ? 'portrait' : '',
-        '100', '100', 'random', '', '', '');
+        '100', '100', 'random', '', '', query);
     _search(context, filters, 'Random');
   }
 

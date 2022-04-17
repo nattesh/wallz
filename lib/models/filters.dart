@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:wallz/models/query_filter.dart';
 
 part 'filters.g.dart';
 
@@ -11,13 +12,13 @@ class Filters {
   String sorting = 'date_added';
   String order = 'desc';
   String colors = '';
-  String tagName =  '';
+  QueryFilter query;
+
 
   Filters(this.ratios, this.categories, this.purity, this.sorting, this.order,
-      this.colors, this.tagName);
+      this.colors, this.query);
 
   factory Filters.fromJson(Map<String, dynamic> json) => _$FiltersFromJson(json);
   Map<String, dynamic> toJson() => _$FiltersToJson(this);
-
 
 }

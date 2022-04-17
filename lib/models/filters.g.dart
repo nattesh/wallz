@@ -13,7 +13,7 @@ Filters _$FiltersFromJson(Map<String, dynamic> json) => Filters(
       json['sorting'] as String,
       json['order'] as String,
       json['colors'] as String,
-      json['tag_name'] as String,
+      QueryFilter.fromJson(json['query'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$FiltersToJson(Filters instance) => <String, dynamic>{
@@ -23,5 +23,5 @@ Map<String, dynamic> _$FiltersToJson(Filters instance) => <String, dynamic>{
       'sorting': instance.sorting,
       'order': instance.order,
       'colors': instance.colors,
-      'tag_name': instance.tagName,
+      'query': instance.query,
     };

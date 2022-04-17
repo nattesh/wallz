@@ -4,6 +4,7 @@ import 'package:wallz/models/filters.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' show jsonDecode;
 import 'package:wallz/props/api_properties.dart';
+import 'package:wallz/models/query_filter.dart';
 
 Future<ApiResponse> getData(int page, Filters filters) async {
 
@@ -15,18 +16,8 @@ Future<ApiResponse> getData(int page, Filters filters) async {
   var colors = filters.colors;
   var apiKey = '';
 
-  print(filters.sorting);
-
-  var tagName =  filters.tagName;
-  tagName = tagName.trim().replaceAll(' ', '+');
-
   var url = baseUrl + '?page=${page}';
-
-  if(tagName != null && tagName.isNotEmpty) {
-    url += '&q=${tagName}&sorting=relevance';
-  } else {
-    url += '&q=';
-  }
+  url = handleQuery(url, filters.query);
 
   if(ratios != null && ratios.isNotEmpty) {
     url += '&ratios=${ratios}';
@@ -35,7 +26,9 @@ Future<ApiResponse> getData(int page, Filters filters) async {
     url += '&categories=${categories}';
   }
   if(sorting != null && sorting.isNotEmpty) {
-    url += '&sorting=${sorting}';
+    if(url.indexOf('&sorting') == -1) {
+      url += '&sorting=${sorting}';
+    }
   }
   if(purity != null && purity.isNotEmpty) {
     url += '&purity=${purity}';
@@ -49,9 +42,28 @@ Future<ApiResponse> getData(int page, Filters filters) async {
   if(colors != null && colors.isNotEmpty) {
     url += '&colors=${colors}';
   }
-
+  print(url);
   final response = await http.get(Uri.parse(url));
   return ApiResponse.fromJson(jsonDecode(response.body));
+}
+
+String handleQuery(String url, QueryFilter query) {
+  var tagName =  query.tagName;
+  var like = query.like;
+  var username = query.username;
+
+  tagName = tagName.trim().replaceAll(' ', '+');
+
+  if(tagName != null && tagName.isNotEmpty) {
+    url += '&q=${tagName}&sorting=relevance';
+  } else if(like != null && like.isNotEmpty) {
+    url += '&q=like:${like}';
+  } else if(username != null && username.isNotEmpty) {
+    url += '&q=@:${username}';
+  } else {
+    url += '&q=';
+  }
+  return url;
 }
 
 Future<ApiDetailsResponse> getDetails(String id) async {
