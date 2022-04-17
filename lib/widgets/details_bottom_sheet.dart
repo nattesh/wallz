@@ -75,6 +75,13 @@ class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
     _search(context, filters, 'Similar');
   }
 
+  _searchByUser(String username, BuildContext context) {
+    QueryFilter query = QueryFilter('', username, '');
+    Filters filters = new Filters('portrait',
+        '100', '100', '', '', '', query);
+    _search(context, filters, 'By user: ${username}');
+  }
+
   List<Widget> _renderColors(List<String> colors, BuildContext context) {
     List<Widget> rendered = [];
     colors.forEach((c) {
@@ -208,6 +215,10 @@ class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
                               fontSize: 15
                           ),
                         ),
+                        IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: () => _searchByUser(widget.details.uploader.username, context),
+                        ),
                       ],
                   )
                 ),
@@ -231,6 +242,9 @@ class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
                         style: TextStyle(
                             fontSize: 15
                         ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(5),
                       ),
                       Icon(
                           Icons.photo_size_select_actual_outlined
@@ -282,7 +296,7 @@ class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
                   )
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(15, 10, 15, 5),
+                  padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
                   width: MediaQuery.of(context).size.width,
                   child: Center(
                     child: ElevatedButton(

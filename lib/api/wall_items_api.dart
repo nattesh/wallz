@@ -59,7 +59,7 @@ String handleQuery(String url, QueryFilter query) {
   } else if(like != null && like.isNotEmpty) {
     url += '&q=like:${like}';
   } else if(username != null && username.isNotEmpty) {
-    url += '&q=@:${username}';
+    url += '&q=@${username}';
   } else {
     url += '&q=';
   }
