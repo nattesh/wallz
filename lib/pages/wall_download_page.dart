@@ -37,7 +37,7 @@ class _WallDownloadPageState extends State<WallDownloadPage> {
             SizedBox(
               height: MediaQuery.of(context).size.height,
               child: Image(
-                  image: NetworkImage(widget.item.thumbs.large),
+                  image: NetworkImage(widget.item.thumbs.original),
                   fit: BoxFit.cover
               ),
             ),

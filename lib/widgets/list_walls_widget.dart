@@ -65,7 +65,7 @@ class _ListWallsState extends State<ListWalls> {
     List<Widget> result = [];
 
     widget.walls.forEach((element) {
-      var src = element.thumbs.large;
+      var src = element.thumbs.original;
       var img = Image(
           image: NetworkImage(src),
           fit: BoxFit.cover
