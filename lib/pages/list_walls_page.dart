@@ -3,6 +3,7 @@ import 'package:wallz/api/wall_items_api.dart';
 import 'package:wallz/models/api_response.dart';
 import 'package:wallz/models/filters.dart';
 import 'package:wallz/widgets/list_walls_widget.dart';
+import 'package:wallz/widgets/filters_bottom_sheet.dart';
 
 class ListWallPage extends StatefulWidget {
   const ListWallPage({Key? key, required this.title, required this.filters}) : super(key: key);
@@ -17,15 +18,28 @@ class ListWallPage extends StatefulWidget {
 class _ListWallPageState extends State<ListWallPage> {
 
   late Future<ApiResponse> data;
+  late Filters filters;
 
   @override
   void initState() {
     super.initState();
-    data = getData(1, widget.filters);
+    filters = widget.filters;
+    data = getData(1, filters);
   }
 
   _goHome(BuildContext context) {
     Navigator.of(context).popUntil((route) => route.isFirst );
+  }
+
+  Widget _getIconFilter() {
+    switch(filters.ratios) {
+      case 'portrait':
+        return Icon(Icons.stay_current_portrait);
+      case 'landscape':
+        return Icon(Icons.stay_current_landscape);
+      default:
+        return Icon(Icons.all_inclusive);
+    }
   }
 
   @override
@@ -46,6 +60,26 @@ class _ListWallPageState extends State<ListWallPage> {
           )
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          Filters? res = await showModalBottomSheet<Filters>(
+            context: context,
+            builder: (_) => FiltersBottomSheet(filters: widget.filters, oldTitle: widget.title,)
+          );
+
+          if(res != null) {
+            filters = res;
+            setState(() {
+              data = getData(1, filters);
+            });
+          }
+        },
+        child: _getIconFilter(),
+        backgroundColor: widget.filters.colors.isNotEmpty ?
+            Color(int.parse('0xff' + widget.filters.colors))
+            : Color.fromARGB(255, 48, 48, 48),
+        foregroundColor: Colors.white,
+      ),
       body: FutureBuilder(
           future: data,
           builder: (BuildContext context, AsyncSnapshot<ApiResponse> snapshot) {
@@ -61,7 +95,7 @@ class _ListWallPageState extends State<ListWallPage> {
                 color: Colors.blueGrey,
               ));
             }
-          }),// This trailing comma makes auto-formatting nicer for build methods.
+          }),
     );
   }
 }

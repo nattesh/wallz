@@ -60,7 +60,7 @@ class _WallDownloadPageState extends State<WallDownloadPage> {
                 child: ElevatedButton(
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all(CircleBorder()),
-                    backgroundColor: MaterialStateProperty.all(Colors.blueGrey),
+                    backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 48, 48, 48)),
                     shadowColor: MaterialStateProperty.all(Colors.black)
                   ),
                   child: Padding(
@@ -83,7 +83,7 @@ class _WallDownloadPageState extends State<WallDownloadPage> {
             );
           },
           child: const Icon(Icons.info),
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: Color.fromARGB(255, 48, 48, 48),
           foregroundColor: Colors.white,
         ),
       ),

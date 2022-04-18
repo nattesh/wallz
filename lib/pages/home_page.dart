@@ -3,6 +3,7 @@ import 'package:wallz/pages/list_walls_page.dart';
 import 'package:wallz/models/filters.dart';
 import 'package:wallz/models/query_filter.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:wallz/utils/constants.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,32 +24,13 @@ class _HomePageState extends State<HomePage> {
     _controller = TextEditingController();
   }
 
-  final Map<int, Widget> screenSizes = const <int, Widget> {
-    0: Center (
-      child: Padding(
-        child: Icon(
-            Icons.stay_current_portrait
-        ),
-        padding: EdgeInsets.fromLTRB(5, 20, 5, 20),
-      ),
-    ),
-    1: Center (
-        child: Icon(
-        Icons.all_inclusive
-      ),
-    ),
-    2: Center (
-      child: Icon(
-          Icons.stay_current_landscape
-      ),
-    ),
-  };
-
   String _getOrientation() {
     switch(selectedScreenSize) {
       case 0:
         return 'portrait';
       case 1:
+        return '';
+      case 2:
         return 'landscape';
       default:
         return '';
