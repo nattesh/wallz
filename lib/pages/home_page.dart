@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wallz/pages/list_walls_page.dart';
 import 'package:wallz/models/filters.dart';
 import 'package:wallz/models/query_filter.dart';
+import 'package:flutter/cupertino.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,7 +15,7 @@ class _HomePageState extends State<HomePage> {
 
   late TextEditingController _controller;
   bool disabledBtn = true;
-  bool onlyPortrait = true;
+  int selectedScreenSize = 0;
 
   @override
   void initState() {
@@ -22,36 +23,64 @@ class _HomePageState extends State<HomePage> {
     _controller = TextEditingController();
   }
 
+  final Map<int, Widget> screenSizes = const <int, Widget> {
+    0: Center (
+      child: Padding(
+        child: Icon(
+            Icons.stay_current_portrait
+        ),
+        padding: EdgeInsets.fromLTRB(5, 20, 5, 20),
+      ),
+    ),
+    1: Center (
+        child: Icon(
+        Icons.all_inclusive
+      ),
+    ),
+    2: Center (
+      child: Icon(
+          Icons.stay_current_landscape
+      ),
+    ),
+  };
+
+  String _getOrientation() {
+    switch(selectedScreenSize) {
+      case 0:
+        return 'portrait';
+      case 1:
+        return 'landscape';
+      default:
+        return '';
+    }
+  }
+
   _searchByTagName(BuildContext context) {
     String value = _controller.text;
     QueryFilter query = QueryFilter(value, '', '');
     Filters filters = new Filters(
-        onlyPortrait ? 'portrait' : '',
-        '100', '100', 'relevance', '', '', query);
+        _getOrientation(), '100', '100', 'relevance', '', '', query);
     _search(context, filters, query.tagName);
   }
 
   _searchLatest(BuildContext context) {
     QueryFilter query = QueryFilter('', '', '');
     Filters filters = new Filters(
-        onlyPortrait ? 'portrait' : '',
-        '100', '100', 'date_added', '', '', query);
+        _getOrientation(), '100', '100', 'date_added', '', '', query);
     _search(context, filters, 'Latest');
   }
 
   _searchToplist(BuildContext context) {
     QueryFilter query = QueryFilter('', '', '');
     Filters filters = new Filters(
-        onlyPortrait ? 'portrait' : '',
-        '100', '100', 'toplist', '', '', query);
+        _getOrientation(), '100', '100', 'toplist', '', '', query);
     _search(context, filters, 'Toplist');
   }
 
   _searchRandom(BuildContext context) {
     QueryFilter query = QueryFilter('', '', '');
     Filters filters = new Filters(
-        onlyPortrait ? 'portrait' : '',
-        '100', '100', 'random', '', '', query);
+        _getOrientation(), '100', '100', 'random', '', '', query);
     _search(context, filters, 'Random');
   }
 
@@ -72,12 +101,6 @@ class _HomePageState extends State<HomePage> {
   void _onChange(txt) {
     setState(() {
       disabledBtn = txt.length == 0;
-    });
-  }
-
-  void _setPortrait(value) async {
-    setState(() {
-      onlyPortrait = value;
     });
   }
 
@@ -157,21 +180,16 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Only portrait'),
-                          Switch(
-                            activeColor: Colors.blueGrey,
-                            value: onlyPortrait,
-                            onChanged: (value) => _setPortrait(value),
-                          ),
-                        ]
-                    ),
                     TextField(
                       controller: _controller,
                       onChanged: (txt) => _onChange(txt),
                       decoration: InputDecoration(
+                        labelStyle: TextStyle(
+                          color: Colors.white
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white)
+                        ),
                         border: OutlineInputBorder(),
                         labelText: 'Search',
                         suffixIcon: disabledBtn ? null : IconButton(
@@ -196,14 +214,21 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.all(30),
-              child: Column(
-                children: [
-
-                  Padding(
-                    padding: EdgeInsets.all(10),
-                  ),
-                ],
+              padding: EdgeInsets.fromLTRB(5, 0, 5, 40),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                child: CupertinoSegmentedControl(
+                  unselectedColor: Color.fromARGB(100, 31, 31, 31),
+                  borderColor: Colors.blueGrey,
+                  selectedColor: Colors.blueGrey,
+                  children: screenSizes,
+                  onValueChanged: (int val) {
+                    setState(() {
+                      selectedScreenSize = val;
+                    });
+                  },
+                  groupValue: selectedScreenSize,
+                ),
               ),
             ),
           )
