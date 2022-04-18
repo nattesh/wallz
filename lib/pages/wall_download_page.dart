@@ -30,13 +30,21 @@ class _WallDownloadPageState extends State<WallDownloadPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: Hero(
+        tag: widget.item.id,
         child: Stack(
           children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: Image(
+                  image: NetworkImage(widget.item.thumbs.original),
+                  fit: BoxFit.cover
+              ),
+            ),
             Center(
               child: CircularProgressIndicator(
-                color: Colors.blueGrey,
-              )
+                color: Colors.white,
+              ),
             ),
             PhotoView(
               initialScale: PhotoViewComputedScale.covered * 1.0,
