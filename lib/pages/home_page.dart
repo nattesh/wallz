@@ -17,6 +17,9 @@ class _HomePageState extends State<HomePage> {
   late TextEditingController _controller;
   bool disabledBtn = true;
   int selectedScreenSize = 0;
+  bool genericFilter = true;
+  bool animeFilter = false;
+  bool peopleFilter = false;
 
   @override
   void initState() {
@@ -24,7 +27,7 @@ class _HomePageState extends State<HomePage> {
     _controller = TextEditingController();
   }
 
-  String _getOrientation() {
+  String _getRatio() {
     switch(selectedScreenSize) {
       case 0:
         return 'portrait';
@@ -37,32 +40,36 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  String _getCategories() {
+    return '${genericFilter ? '1' : '0'}${animeFilter ? '1' : '0'}${peopleFilter ? '1' : '0'}';
+  }
+
   _searchByTagName(BuildContext context) {
     String value = _controller.text;
     QueryFilter query = QueryFilter(value, '', '');
     Filters filters = new Filters(
-        _getOrientation(), '100', '100', 'relevance', '', '', query);
+        _getRatio(), _getCategories(), '100', 'relevance', '', '', query);
     _search(context, filters, query.tagName);
   }
 
   _searchLatest(BuildContext context) {
     QueryFilter query = QueryFilter('', '', '');
     Filters filters = new Filters(
-        _getOrientation(), '100', '100', 'date_added', '', '', query);
+        _getRatio(), _getCategories(), '100', 'date_added', '', '', query);
     _search(context, filters, 'Latest');
   }
 
   _searchToplist(BuildContext context) {
     QueryFilter query = QueryFilter('', '', '');
     Filters filters = new Filters(
-        _getOrientation(), '100', '100', 'toplist', '', '', query);
+        _getRatio(), _getCategories(), '100', 'toplist', '', '', query);
     _search(context, filters, 'Toplist');
   }
 
   _searchRandom(BuildContext context) {
     QueryFilter query = QueryFilter('', '', '');
     Filters filters = new Filters(
-        _getOrientation(), '100', '100', 'random', '', '', query);
+        _getRatio(), _getCategories(), '100', 'random', '', '', query);
     _search(context, filters, 'Random');
   }
 
@@ -156,7 +163,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Container (
-              height: 200,
+              height: 150,
               child: Padding(
                 padding: EdgeInsets.all(15),
                 child: Column(
@@ -195,23 +202,86 @@ class _HomePageState extends State<HomePage> {
               )
           ),
           Expanded(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(5, 0, 5, 40),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                child: CupertinoSegmentedControl(
-                  unselectedColor: Color.fromARGB(100, 31, 31, 31),
-                  borderColor: Colors.blueGrey,
-                  selectedColor: Colors.blueGrey,
-                  children: screenSizes,
-                  onValueChanged: (int val) {
-                    setState(() {
-                      selectedScreenSize = val;
-                    });
-                  },
-                  groupValue: selectedScreenSize,
+            child: Column(
+              children: [
+                Container(
+                  alignment: Alignment.topLeft,
+                  padding: EdgeInsets.fromLTRB(15, 15, 15, 5),
+                  child: Text('Screen ratio:'),
                 ),
-              ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: CupertinoSegmentedControl(
+                    unselectedColor: Color.fromARGB(100, 31, 31, 31),
+                    borderColor: Colors.blueGrey,
+                    selectedColor: Colors.blueGrey,
+                    children: screenSizes,
+                    onValueChanged: (int val) {
+                      setState(() {
+                        selectedScreenSize = val;
+                      });
+                    },
+                    groupValue: selectedScreenSize,
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.topLeft,
+                  padding: EdgeInsets.fromLTRB(15, 40, 15, 5),
+                  child: Text('Categories:'),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: InputChip(
+                          label: Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Text('Generic'),
+                          ),
+                          onSelected: (bool value) {
+                            setState(() {
+                              genericFilter = value;
+                            });
+                          },
+                          selected: genericFilter,
+                          selectedColor: Colors.blueGrey,
+                        ),
+                      ),
+                      Center(
+                        child: InputChip(
+                          label: Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Text('Anime'),
+                          ),
+                          onSelected: (bool value) {
+                            setState(() {
+                              animeFilter = value;
+                            });
+                          },
+                          selected: animeFilter,
+                          selectedColor: Colors.blueGrey,
+                        ),
+                      ),
+                      Expanded(
+                        child: InputChip(
+                          label: Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Text('People'),
+                          ),
+                          onSelected: (bool value) {
+                            setState(() {
+                              peopleFilter = value;
+                            });
+                          },
+                          selected: peopleFilter,
+                          selectedColor: Colors.blueGrey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           )
         ],

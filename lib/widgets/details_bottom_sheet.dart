@@ -9,9 +9,10 @@ import 'package:wallz/utils/extensions.dart';
 import 'package:wallz/models/query_filter.dart';
 
 class DetailsBottomSheet extends StatefulWidget {
-  const DetailsBottomSheet({Key? key, required DetailsData this.details}) : super(key: key);
+  const DetailsBottomSheet({Key? key, required DetailsData this.details, required Filters this.filters}) : super(key: key);
 
   final DetailsData details;
+  final Filters filters;
 
   @override
   State<DetailsBottomSheet> createState() => _DetailsBottomSheetState();
@@ -21,10 +22,12 @@ class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
 
   bool downloading = false;
   bool done = false;
+  late Filters searchFilters;
 
   @override
   void initState() {
     super.initState();
+    searchFilters = widget.filters;
   }
 
   void _saveNetworkImage(BuildContext context) async {
@@ -55,31 +58,26 @@ class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
   }
 
   _searchByColor(String color, BuildContext context) {
-    QueryFilter query = QueryFilter('', '', '');
-    Filters filters = new Filters('portrait',
-        '100', '100', '', '', color.replaceAll('#', ''), query);
-    _search(context, filters, 'By color');
+    searchFilters.colors.replaceAll('#', '');
+    _search(context, searchFilters, 'By color');
   }
 
   _searchByTag(String tag, BuildContext context) {
     QueryFilter query = QueryFilter(tag, '', '');
-    Filters filters = new Filters('portrait',
-        '100', '100', '', '', '', query);
-    _search(context, filters, tag.capitalize());
+    searchFilters.query = query;
+    _search(context, searchFilters, tag.capitalize());
   }
 
   _searchForSimilar(String like, BuildContext context) {
     QueryFilter query = QueryFilter('', '', like);
-    Filters filters = new Filters('portrait',
-        '100', '100', '', '', '', query);
-    _search(context, filters, 'Similar');
+    searchFilters.query = query;
+    _search(context, searchFilters, 'Similar');
   }
 
   _searchByUser(String username, BuildContext context) {
     QueryFilter query = QueryFilter('', username, '');
-    Filters filters = new Filters('portrait',
-        '100', '100', '', '', '', query);
-    _search(context, filters, 'By user: ${username}');
+    searchFilters.query = query;
+    _search(context, searchFilters, 'By user: ${username}');
   }
 
   List<Widget> _renderColors(List<String> colors, BuildContext context) {

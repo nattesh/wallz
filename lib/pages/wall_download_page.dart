@@ -5,11 +5,13 @@ import 'package:photo_view/photo_view.dart';
 import 'package:wallz/widgets/details_bottom_sheet.dart';
 import 'package:wallz/models/api_details_response.dart';
 import 'package:wallz/api/wall_items_api.dart';
+import 'package:wallz/models/filters.dart';
 
 class WallDownloadPage extends StatefulWidget {
-  const WallDownloadPage({Key? key, required this.item}) : super(key: key);
+  const WallDownloadPage({Key? key, required this.item, required Filters this.filters}) : super(key: key);
 
   final WallItem item;
+  final Filters filters;
 
   @override
   State<WallDownloadPage> createState() => _WallDownloadPageState();
@@ -18,10 +20,12 @@ class WallDownloadPage extends StatefulWidget {
 class _WallDownloadPageState extends State<WallDownloadPage> {
 
   late ApiDetailsResponse responseDetails;
+  late Filters searchFilters;
 
   @override
   void initState() {
     super.initState();
+    searchFilters = widget.filters;
     getDetails(widget.item.id).then((res) {
       responseDetails = res;
     });
@@ -79,7 +83,7 @@ class _WallDownloadPageState extends State<WallDownloadPage> {
           onPressed: () {
             showModalBottomSheet<void>(
               context: context,
-              builder: (_) => DetailsBottomSheet(details: responseDetails.data,),
+              builder: (_) => DetailsBottomSheet(details: responseDetails.data, filters: searchFilters,),
             );
           },
           child: const Icon(Icons.info),

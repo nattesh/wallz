@@ -75,7 +75,7 @@ class _ListWallsState extends State<ListWalls> {
         GestureDetector(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return WallDownloadPage(item: element,);
+              return WallDownloadPage(item: element, filters: widget.filters,);
             }));
           },
           child: Hero(

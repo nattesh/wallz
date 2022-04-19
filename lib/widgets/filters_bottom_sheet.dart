@@ -19,6 +19,9 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
   int selectedScreenSize = 0;
   String sortSelect = '';
   String sortingOrder = 'desc';
+  bool genericFilter = true;
+  bool animeFilter = false;
+  bool peopleFilter = false;
 
   @override
   void initState() {
@@ -31,11 +34,14 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
       selectedScreenSize = 1;
     }
 
-    sortSelect = widget.filters.sorting;
+    sortSelect = widget.filters.sorting.isEmpty ? 'date_added' : widget.filters.sorting;
     sortingOrder = widget.filters.order;
+    genericFilter = widget.filters.categories[0] == '1';
+    animeFilter = widget.filters.categories[1] == '1';
+    peopleFilter = widget.filters.categories[2] == '1';
   }
 
-  String _getOrientation() {
+  String _getRatio() {
     switch(selectedScreenSize) {
       case 0:
         return 'portrait';
@@ -46,6 +52,10 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
       default:
         return '';
     }
+  }
+
+  String _getCategories() {
+    return '${genericFilter ? '1' : '0'}${animeFilter ? '1' : '0'}${peopleFilter ? '1' : '0'}';
   }
 
   List<DropdownMenuItem<String>> get dropdownItems {
@@ -66,9 +76,10 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
 
   Filters _newFilters() {
     var filters = widget.filters;
-    filters.ratios = _getOrientation();
+    filters.ratios = _getRatio();
     filters.sorting = sortSelect;
     filters.order = sortingOrder;
+    filters.categories = _getCategories();
     return filters;
   }
 
@@ -119,7 +130,42 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(15, 15, 15, 5),
+                  padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+                  child: Text('Sort by:'),
+                ),
+                Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width / 12 * 9,
+                          child: DropdownButton(
+                            isExpanded: true,
+                            value: sortSelect,
+                            items: dropdownItems,
+                            onChanged: (String? value) {
+                              setState(() {
+                                if(value != null) {
+                                  sortSelect = value;
+                                }
+                              });
+                            },
+                          ),
+                        ),
+                        IconButton(
+                          icon: getIconBySorting(),
+                          onPressed: () {
+                            setState(() {
+                              sortingOrder = sortingOrder == 'asc' ? 'desc' : 'asc';
+                            });
+                          },
+                        )
+                      ],
+                    )
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(15, 10, 15, 5),
                   child: Text('Screen ratio:'),
                 ),
                 Container(
@@ -138,40 +184,63 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
                   )
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(15, 30, 15, 5),
-                  child: Text('Sort by:'),
+                  alignment: Alignment.topLeft,
+                  padding: EdgeInsets.fromLTRB(15, 20, 15, 0),
+                  child: Text('Categories:'),
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                  padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
                   child: Row(
                     children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width / 12 * 9,
-                        child: DropdownButton(
-                          isExpanded: true,
-                          value: sortSelect,
-                          items: dropdownItems,
-                          onChanged: (String? value) {
+                      Expanded(
+                        child: InputChip(
+                          label: Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Text('Generic'),
+                          ),
+                          onSelected: (bool value) {
                             setState(() {
-                              if(value != null) {
-                                sortSelect = value;
-                              }
+                              genericFilter = value;
                             });
                           },
+                          selected: genericFilter,
+                          selectedColor: Colors.blueGrey,
                         ),
                       ),
-                      IconButton(
-                        icon: getIconBySorting(),
-                        onPressed: () {
-                          setState(() {
-                            sortingOrder = sortingOrder == 'asc' ? 'desc' : 'asc';
-                          });
-                        },
-                      )
+                      Center(
+                        child: InputChip(
+                          label: Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Text('Anime'),
+                          ),
+                          onSelected: (bool value) {
+                            setState(() {
+                              animeFilter = value;
+                            });
+                          },
+                          selected: animeFilter,
+                          selectedColor: Colors.blueGrey,
+                        ),
+                      ),
+                      Expanded(
+                        child: InputChip(
+                          label: Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Text('People'),
+                          ),
+                          onSelected: (bool value) {
+                            setState(() {
+                              peopleFilter = value;
+                            });
+                          },
+                          selected: peopleFilter,
+                          selectedColor: Colors.blueGrey,
+                        ),
+                      ),
                     ],
-                  )
-                )
+                  ),
+                ),
               ],
             ),
             Container(
