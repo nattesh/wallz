@@ -171,18 +171,17 @@ class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 8 / 5,
-      color: Colors.blueGrey,
       child: Stack(
           children: [
             Container(
-                width: MediaQuery.of(context).size.width,
-                alignment: Alignment.bottomCenter,
-                padding: EdgeInsets.all(20),
-                margin: EdgeInsets.only(bottom: 30),
-                child: SizedBox(
-                    width: double.infinity,
-                    child: _renderDownloadSection(),
-                )
+              width: MediaQuery.of(context).size.width,
+              alignment: Alignment.bottomCenter,
+              padding: EdgeInsets.all(20),
+              margin: EdgeInsets.only(bottom: 30),
+              child: SizedBox(
+                width: double.infinity,
+                child: _renderDownloadSection(),
+              )
             ),
             Column (
               children: [
@@ -322,12 +321,12 @@ class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
               ],
             ),
             Container(
-                width: MediaQuery.of(context).size.width,
-                alignment: Alignment.topRight,
-                child: IconButton(
-                  icon: Icon(Icons.close),
-                  onPressed: () => Navigator.pop(context),
-                )
+              width: MediaQuery.of(context).size.width,
+              alignment: Alignment.topRight,
+              child: IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () => Navigator.pop(context),
+              )
             ),
           ]
       ),

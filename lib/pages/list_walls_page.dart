@@ -31,17 +31,6 @@ class _ListWallPageState extends State<ListWallPage> {
     Navigator.of(context).popUntil((route) => route.isFirst );
   }
 
-  Widget _getIconFilter() {
-    switch(filters.ratios) {
-      case 'portrait':
-        return Icon(Icons.stay_current_portrait);
-      case 'landscape':
-        return Icon(Icons.stay_current_landscape);
-      default:
-        return Icon(Icons.all_inclusive);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,7 +63,7 @@ class _ListWallPageState extends State<ListWallPage> {
             });
           }
         },
-        child: _getIconFilter(),
+        child: Icon(Icons.filter_list),
         backgroundColor: widget.filters.colors.isNotEmpty ?
             Color(int.parse('0xff' + widget.filters.colors))
             : Color.fromARGB(255, 48, 48, 48),

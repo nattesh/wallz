@@ -17,7 +17,7 @@ Future<ApiResponse> getData(int page, Filters filters) async {
   var apiKey = '';
 
   var url = baseUrl + '?page=${page}';
-  url = handleQuery(url, filters.query);
+  url = handleQuery(url, filters.query, sorting);
 
   if(ratios != null && ratios.isNotEmpty) {
     url += '&ratios=${ratios}';
@@ -47,7 +47,7 @@ Future<ApiResponse> getData(int page, Filters filters) async {
   return ApiResponse.fromJson(jsonDecode(response.body));
 }
 
-String handleQuery(String url, QueryFilter query) {
+String handleQuery(String url, QueryFilter query, String sorting) {
   var tagName =  query.tagName;
   var like = query.like;
   var username = query.username;
@@ -55,7 +55,10 @@ String handleQuery(String url, QueryFilter query) {
   tagName = tagName.trim().replaceAll(' ', '+');
 
   if(tagName != null && tagName.isNotEmpty) {
-    url += '&q=${tagName}&sorting=relevance';
+    url += '&q=${tagName}';
+    if(sorting == null || sorting.isEmpty) {
+      url += '&sorting=relevance';
+    }
   } else if(like != null && like.isNotEmpty) {
     url += '&q=like:${like}';
   } else if(username != null && username.isNotEmpty) {
