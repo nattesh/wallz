@@ -70,21 +70,21 @@ class _ListWallPageState extends State<ListWallPage> {
         foregroundColor: Colors.white,
       ),
       body: FutureBuilder(
-          future: data,
-          builder: (BuildContext context, AsyncSnapshot<ApiResponse> snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              final data = snapshot.data;
-              if(data != null && data.data != null && data.data.length > 0) {
-                return ListWalls(walls: data.data, onePage: data.meta.lastPage == 1, filters: widget.filters,);
-              } else {
-                return Center(child: Text('No results found'));
-              }
+        future: data,
+        builder: (BuildContext context, AsyncSnapshot<ApiResponse> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            final data = snapshot.data;
+            if(data != null && data.data != null && data.data.length > 0) {
+              return ListWalls(walls: data.data, lastPage: data.meta.lastPage, filters: widget.filters,);
             } else {
-              return Center(child: CircularProgressIndicator(
-                color: Colors.blueGrey,
-              ));
+              return Center(child: Text('No results found'));
             }
-          }),
+          } else {
+            return Center(child: CircularProgressIndicator(
+              color: Colors.blueGrey,
+            ));
+          }
+        }),
     );
   }
 }

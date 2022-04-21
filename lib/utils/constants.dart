@@ -20,3 +20,13 @@ final Map<int, Widget> screenSizes = const <int, Widget> {
     ),
   ),
 };
+
+Icon getOrientationIcon(int dimX, int dimY) {
+  if(dimX > dimY) {
+    return Icon(Icons.stay_current_landscape);
+  } else if(dimX < dimY) {
+    return Icon(Icons.stay_current_portrait);
+  } else {
+    return Icon(Icons.all_inclusive);
+  }
+}

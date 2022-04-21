@@ -6,6 +6,7 @@ import 'package:wallz/models/tag.dart';
 import 'package:wallz/models/filters.dart';
 import 'package:wallz/pages/list_walls_page.dart';
 import 'package:wallz/utils/extensions.dart';
+import 'package:wallz/utils/constants.dart';
 import 'package:wallz/models/query_filter.dart';
 
 class DetailsBottomSheet extends StatefulWidget {
@@ -58,26 +59,28 @@ class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
   }
 
   _searchByColor(String color, BuildContext context) {
-    searchFilters.colors.replaceAll('#', '');
-    _search(context, searchFilters, 'By color');
+    QueryFilter query = QueryFilter('', '', '');
+    Filters newFilters = Filters(widget.filters.ratios, widget.filters.categories, '100', '', '', '', query);
+    newFilters.colors = color.replaceAll('#', '');
+    _search(context, newFilters, 'By color');
   }
 
   _searchByTag(String tag, BuildContext context) {
     QueryFilter query = QueryFilter(tag, '', '');
-    searchFilters.query = query;
-    _search(context, searchFilters, tag.capitalize());
+    Filters newFilters = Filters(widget.filters.ratios, widget.filters.categories, '100', '', '', '', query);
+    _search(context, newFilters, tag.capitalize());
   }
 
   _searchForSimilar(String like, BuildContext context) {
     QueryFilter query = QueryFilter('', '', like);
-    searchFilters.query = query;
-    _search(context, searchFilters, 'Similar');
+    Filters newFilters = Filters(widget.filters.ratios, widget.filters.categories, '100', '', '', '', query);
+    _search(context, newFilters, 'Similar');
   }
 
   _searchByUser(String username, BuildContext context) {
     QueryFilter query = QueryFilter('', username, '');
-    searchFilters.query = query;
-    _search(context, searchFilters, 'By user: ${username}');
+    Filters newFilters = Filters(widget.filters.ratios, widget.filters.categories, '100', '', '', '', query);
+    _search(context, newFilters, 'By user: ${username}');
   }
 
   List<Widget> _renderColors(List<String> colors, BuildContext context) {
@@ -232,6 +235,9 @@ class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
                             fontSize: 15
                         ),
                       ),
+                      Padding(
+                        padding: EdgeInsets.all(5),
+                      ),
                       Icon(
                           Icons.remove_red_eye_sharp
                       ),
@@ -243,9 +249,7 @@ class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
                       Padding(
                         padding: EdgeInsets.all(5),
                       ),
-                      Icon(
-                          Icons.photo_size_select_actual_outlined
-                      ),
+                      getOrientationIcon(widget.details.dimensionX, widget.details.dimensionY),
                       Text(' ' + widget.details.resolution,
                         style: TextStyle(
                             fontSize: 15
