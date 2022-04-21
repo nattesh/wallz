@@ -241,7 +241,13 @@ class _HomePageState extends State<HomePage> {
                           ),
                           onSelected: (bool value) {
                             setState(() {
-                              genericFilter = value;
+                              if(!value) {
+                                if(animeFilter || peopleFilter) {
+                                  genericFilter = value;
+                                }
+                              } else {
+                                genericFilter = value;
+                              }
                             });
                           },
                           selected: genericFilter,
@@ -256,7 +262,13 @@ class _HomePageState extends State<HomePage> {
                           ),
                           onSelected: (bool value) {
                             setState(() {
-                              animeFilter = value;
+                              if(!value) {
+                                if(genericFilter || peopleFilter) {
+                                  animeFilter = value;
+                                }
+                              } else {
+                                animeFilter = value;
+                              }
                             });
                           },
                           selected: animeFilter,
@@ -271,7 +283,13 @@ class _HomePageState extends State<HomePage> {
                           ),
                           onSelected: (bool value) {
                             setState(() {
-                              peopleFilter = value;
+                              if(!value) {
+                                if(genericFilter || animeFilter) {
+                                  peopleFilter = value;
+                                }
+                              } else {
+                                peopleFilter = value;
+                              }
                             });
                           },
                           selected: peopleFilter,
