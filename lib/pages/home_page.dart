@@ -45,11 +45,12 @@ class _HomePageState extends State<HomePage> {
     return '${genericFilter ? '1' : '0'}${animeFilter ? '1' : '0'}${peopleFilter ? '1' : '0'}';
   }
 
-  _searchByTagName(BuildContext context) {
-    String value = _controller.text;
+  _manualSearch(BuildContext context) {
+    String value = _controller.text.isNotEmpty ? _controller.text : '';
     QueryFilter query = QueryFilter(value, '', '');
+    String sorting = value.isNotEmpty ? 'relevance' : '';
     Filters filters = new Filters(
-        _getRatio(), _getCategories(), '100', 'relevance', '', selectedColor, query);
+        _getRatio(), _getCategories(), '100', sorting, '', selectedColor, query);
     _search(context, filters, query.tagName);
   }
 
@@ -403,14 +404,14 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     onSubmitted: (String value) => {
-                      _searchByTagName(context)
+                      _manualSearch(context)
                     },
                   ),
                   Padding(
                     padding: EdgeInsets.all(10),
                     child: ElevatedButton(
                         child: Icon(Icons.search, color: Colors.blueGrey,),
-                        onPressed: () => _searchByTagName(context),
+                        onPressed: () => _manualSearch(context),
                         style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 40, 40, 40)),
                             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
