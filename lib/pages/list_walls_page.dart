@@ -31,6 +31,16 @@ class _ListWallPageState extends State<ListWallPage> {
     Navigator.of(context).popUntil((route) => route.isFirst );
   }
 
+  String _title() {
+    if(widget.title.isNotEmpty) {
+      return widget.title;
+    } else if(widget.filters.colors.isNotEmpty) {
+      return 'By color';
+    } else {
+      return 'Wallz';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +48,7 @@ class _ListWallPageState extends State<ListWallPage> {
       Color(int.parse('0xff' + widget.filters.colors))
           : null,
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(_title()),
         backgroundColor: widget.filters.colors.isNotEmpty ?
           Color(int.parse('0xff' + widget.filters.colors))
           : null,

@@ -20,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   bool genericFilter = true;
   bool animeFilter = false;
   bool peopleFilter = false;
+  String selectedColor = '';
 
   @override
   void initState() {
@@ -48,28 +49,28 @@ class _HomePageState extends State<HomePage> {
     String value = _controller.text;
     QueryFilter query = QueryFilter(value, '', '');
     Filters filters = new Filters(
-        _getRatio(), _getCategories(), '100', 'relevance', '', '', query);
+        _getRatio(), _getCategories(), '100', 'relevance', '', selectedColor, query);
     _search(context, filters, query.tagName);
   }
 
   _searchLatest(BuildContext context) {
     QueryFilter query = QueryFilter('', '', '');
     Filters filters = new Filters(
-        _getRatio(), _getCategories(), '100', 'date_added', '', '', query);
+        'portrait', '100', '100', 'date_added', '', '', query);
     _search(context, filters, 'Latest');
   }
 
   _searchToplist(BuildContext context) {
     QueryFilter query = QueryFilter('', '', '');
     Filters filters = new Filters(
-        _getRatio(), _getCategories(), '100', 'toplist', '', '', query);
+        'portrait', '100', '100', 'toplist', '', '', query);
     _search(context, filters, 'Toplist');
   }
 
   _searchRandom(BuildContext context) {
     QueryFilter query = QueryFilter('', '', '');
     Filters filters = new Filters(
-        _getRatio(), _getCategories(), '100', 'random', '', '', query);
+        'portrait', '100', '100', 'random', '', '', query);
     _search(context, filters, 'Random');
   }
 
@@ -78,6 +79,36 @@ class _HomePageState extends State<HomePage> {
       context,
       MaterialPageRoute(builder: (context) => ListWallPage(title: title, filters: filters,)),
     );
+  }
+
+  List<Widget> _renderColors() {
+    List<Widget> listColors = [];
+
+    colors.forEach((c) {
+      String cleaned = c.replaceAll('#', '');
+      String parsed = '0xFF' + cleaned;
+      listColors.add(Container(
+        padding: EdgeInsets.only(right: 5),
+        width: 60,
+        child: RaisedButton(
+          padding: EdgeInsets.all(2),
+          child: selectedColor == c ? Icon(Icons.check) : null,
+          onPressed: () => {
+            setState(() {
+              String val = c;
+              if(selectedColor == c) {
+                val = '';
+              }
+              selectedColor = val;
+            })
+          },
+          textColor: Colors.white,
+          color: Color(int.parse(parsed)),
+        ),
+      ));
+    });
+
+    return listColors;
   }
 
   void _reset() {
@@ -99,210 +130,303 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Wallz'),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  alignment: Alignment.center,
-                  width: MediaQuery.of(context).size.width * 0.33,
-                  child: Column (
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        iconSize: 50,
-                        color: Colors.blueAccent,
-                        icon: Icon(Icons.punch_clock),
-                        onPressed: () => {
-                          _searchLatest(context)
-                        },
-                      ),
-                      Text('Latest')
-                    ],
-                  )
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  width: MediaQuery.of(context).size.width * 0.33,
-                  child: Column (
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        iconSize: 50,
-                        color: Colors.redAccent,
-                        icon: Icon(Icons.diamond),
-                        onPressed: () {
-                          _searchToplist(context);
-                        },
-                      ),
-                      Text('Toplist')
-                    ],
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  width: MediaQuery.of(context).size.width * 0.33,
-                  child: Column (
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        iconSize: 50,
-                        color: Colors.amber,
-                        icon: Icon(Icons.shuffle),
-                        onPressed: () {
-                          _searchRandom(context);
-                        },
-                      ),
-                      Text('Random')
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-          Container (
-              height: 150,
-              child: Padding(
-                padding: EdgeInsets.all(15),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextField(
-                      controller: _controller,
-                      onChanged: (txt) => _onChange(txt),
-                      decoration: InputDecoration(
-                        labelStyle: TextStyle(
-                          color: Colors.white
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            thickness: 1,
+                            endIndent: 0,
+                            color: Colors.white,
+                          ),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white)
+                        Center(
+                          child: Container(
+                            padding: EdgeInsets.all(15),
+                            child: Text('Rapid search',
+                                style: TextStyle(
+                                    fontSize: 15
+                                )
+                            ),
+                          ),
                         ),
-                        border: OutlineInputBorder(),
-                        labelText: 'Search',
-                        suffixIcon: disabledBtn ? null : IconButton(
-                          onPressed: _reset,
-                          icon: Icon(Icons.clear),
+                        Expanded(
+                          child: Divider(
+                            thickness: 1,
+                            endIndent: 0,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      onSubmitted: (String value) => {
-                        _searchByTagName(context)
-                      },
+                      ],
                     ),
-                    ElevatedButton(
-                      onPressed: disabledBtn ? () {} : () => _searchByTagName(context),
-                      child: const Text('Search'),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.blueGrey),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                            alignment: Alignment.center,
+                            width: MediaQuery.of(context).size.width * 0.33,
+                            child: Column (
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  iconSize: 50,
+                                  color: Colors.blueAccent,
+                                  icon: Icon(Icons.punch_clock),
+                                  onPressed: () => {
+                                    _searchLatest(context)
+                                  },
+                                ),
+                                Text('Latest')
+                              ],
+                            )
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width * 0.33,
+                          child: Column (
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                iconSize: 50,
+                                color: Colors.redAccent,
+                                icon: Icon(Icons.diamond),
+                                onPressed: () {
+                                  _searchToplist(context);
+                                },
+                              ),
+                              Text('Toplist')
+                            ],
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width * 0.33,
+                          child: Column (
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                iconSize: 50,
+                                color: Colors.amber,
+                                icon: Icon(Icons.shuffle),
+                                onPressed: () {
+                                  _searchRandom(context);
+                                },
+                              ),
+                              Text('Random')
+                            ],
+                          ),
+                        )
+                      ],
                     ),
                   ],
-                ),
-              )
-          ),
-          Expanded(
-            child: Column(
-              children: [
-                Container(
-                  alignment: Alignment.topLeft,
-                  padding: EdgeInsets.fromLTRB(15, 15, 15, 5),
-                  child: Text('Screen ratio:'),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: CupertinoSegmentedControl(
-                    unselectedColor: Color.fromARGB(100, 31, 31, 31),
-                    borderColor: Colors.blueGrey,
-                    selectedColor: Colors.blueGrey,
-                    children: screenSizes,
-                    onValueChanged: (int val) {
-                      setState(() {
-                        selectedScreenSize = val;
-                      });
-                    },
-                    groupValue: selectedScreenSize,
+                )
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 15),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Divider(
+                      thickness: 1,
+                      endIndent: 0,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-                Container(
-                  alignment: Alignment.topLeft,
-                  padding: EdgeInsets.fromLTRB(15, 40, 15, 5),
-                  child: Text('Categories:'),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: InputChip(
-                          label: Padding(
-                            padding: EdgeInsets.all(5),
-                            child: Text('Generic'),
-                          ),
-                          onSelected: (bool value) {
-                            setState(() {
-                              if(!value) {
-                                if(animeFilter || peopleFilter) {
+                  Center(
+                    child: Container(
+                      padding: EdgeInsets.all(15),
+                      child: Text('Manual search',
+                          style: TextStyle(
+                              fontSize: 15
+                          )
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Divider(
+                      thickness: 1,
+                      endIndent: 0,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              child: Column(
+                children: [
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                    child: Text('Screen ratio:'),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.only(bottom: 15),
+                    child: CupertinoSegmentedControl(
+                      unselectedColor: Color.fromARGB(100, 31, 31, 31),
+                      borderColor: Colors.blueGrey,
+                      selectedColor: Colors.blueGrey,
+                      children: screenSizes,
+                      onValueChanged: (int val) {
+                        setState(() {
+                          selectedScreenSize = val;
+                        });
+                      },
+                      groupValue: selectedScreenSize,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(15),
+              child: Column(
+                children: [
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.only(bottom: 5),
+                    child: Text('Categories:'),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: InputChip(
+                            label: Text('Generic'),
+                            onSelected: (bool value) {
+                              setState(() {
+                                if(!value) {
+                                  if(animeFilter || peopleFilter) {
+                                    genericFilter = value;
+                                  }
+                                } else {
                                   genericFilter = value;
                                 }
-                              } else {
-                                genericFilter = value;
-                              }
-                            });
-                          },
-                          selected: genericFilter,
-                          selectedColor: Colors.blueGrey,
-                        ),
-                      ),
-                      Center(
-                        child: InputChip(
-                          label: Padding(
-                            padding: EdgeInsets.all(5),
-                            child: Text('Anime'),
+                              });
+                            },
+                            selected: genericFilter,
+                            selectedColor: Colors.blueGrey,
                           ),
-                          onSelected: (bool value) {
-                            setState(() {
-                              if(!value) {
-                                if(genericFilter || peopleFilter) {
+                        ),
+                        Center(
+                          child: InputChip(
+                            label: Text('Anime'),
+                            onSelected: (bool value) {
+                              setState(() {
+                                if(!value) {
+                                  if(genericFilter || peopleFilter) {
+                                    animeFilter = value;
+                                  }
+                                } else {
                                   animeFilter = value;
                                 }
-                              } else {
-                                animeFilter = value;
-                              }
-                            });
-                          },
-                          selected: animeFilter,
-                          selectedColor: Colors.blueGrey,
-                        ),
-                      ),
-                      Expanded(
-                        child: InputChip(
-                          label: Padding(
-                            padding: EdgeInsets.all(5),
-                            child: Text('People'),
+                              });
+                            },
+                            selected: animeFilter,
+                            selectedColor: Colors.blueGrey,
                           ),
-                          onSelected: (bool value) {
-                            setState(() {
-                              if(!value) {
-                                if(genericFilter || animeFilter) {
+                        ),
+                        Expanded(
+                          child: InputChip(
+                            label: Text('People'),
+                            onSelected: (bool value) {
+                              setState(() {
+                                if(!value) {
+                                  if(genericFilter || animeFilter) {
+                                    peopleFilter = value;
+                                  }
+                                } else {
                                   peopleFilter = value;
                                 }
-                              } else {
-                                peopleFilter = value;
-                              }
-                            });
-                          },
-                          selected: peopleFilter,
-                          selectedColor: Colors.blueGrey,
+                              });
+                            },
+                            selected: peopleFilter,
+                            selectedColor: Colors.blueGrey,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          )
-        ],
+            Container(
+              padding: EdgeInsets.only(left: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                    child: Text('Color:'),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(bottom: 15),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                          children: _renderColors()
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextField(
+                    controller: _controller,
+                    onChanged: (txt) => _onChange(txt),
+                    decoration: InputDecoration(
+                      labelStyle: TextStyle(
+                          color: Colors.white
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white)
+                      ),
+                      border: OutlineInputBorder(),
+                      labelText: 'Tag',
+                      hintText: 'Enter a tag (e.g. \'Mountains\')',
+                      suffixIcon: disabledBtn ? null : IconButton(
+                        onPressed: _reset,
+                        icon: Icon(Icons.clear),
+                      ),
+                    ),
+                    onSubmitted: (String value) => {
+                      _searchByTagName(context)
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(10),
+                    child: ElevatedButton(
+                        child: Icon(Icons.search, color: Colors.blueGrey,),
+                        onPressed: () => _searchByTagName(context),
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 40, 40, 40)),
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: BorderSide(color: Colors.blueGrey)
+                                )
+                            )
+                        )
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
       )
     );
   }
