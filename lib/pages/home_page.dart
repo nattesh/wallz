@@ -396,8 +396,7 @@ class _HomePageState extends State<HomePage> {
                           borderSide: BorderSide(color: Colors.white)
                       ),
                       border: OutlineInputBorder(),
-                      labelText: 'Tag',
-                      hintText: 'Enter a tag (e.g. \'Mountains\')',
+                      hintText: 'Enter the keyword to search',
                       suffixIcon: disabledBtn ? null : IconButton(
                         onPressed: _reset,
                         icon: Icon(Icons.clear),
