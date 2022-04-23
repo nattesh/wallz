@@ -1,16 +1,44 @@
-# wallz
+# Wallz
 
-Wallpaper project
+This is Wallz, a Flutter project about a mobile App which consumes APIs from [Wallhaven](https://wallhaven.cc) (you may find api documentation [here](https://wallhaven.cc/help/api)).
+This app is intented to offer a mobile experience of the original website, all the contents and resources are up to [Wallhaven](https://wallhaven.cc).
 
-## Getting Started
+The app will work both on iOS and Android.
 
-This project is a starting point for a Flutter application.
+## Configuring the project
+Wallz is a pretty standard flutter projec, so you can clone it and build it 'as is'. 
+To prepare your development environment just run (from root directory of the project): 
 
-A few resources to get you started if this is your first Flutter project:
+`flutter pub get`
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+and you're done.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Dependencies
+Here are some of the main dependencies imported by the app:
+ - [Json Serializable](https://pub.dev/packages/json_serializable): all models are written and generated with this library
+ - [Gallery Saver](https://pub.dev/packages/gallery_saver): to download wallpapers
+ - [Shared Preferences](https://pub.dev/packages/shared_preferences): not used at the moment
+ - [Cached Network Image](https://pub.dev/packages/cached_network_image): to render fullscreen images
+ - [Photo View](https://pub.dev/packages/photo_view): to handle gesture on fullscreen images
+
+## Screenshots
+
+### Homepage
+![Homepage](https://i.ibb.co/jwLJ3vf/Home.png)
+
+### Search grid
+![Grid](https://i.ibb.co/KKXQsRM/Grid.png)
+
+### Filters
+![Filters](https://i.ibb.co/k8PZyLj/Filters.png)
+
+### Fullscreen wallpaper
+![Fullscreen wallpaper](https://i.ibb.co/rw1Rtsw/Wall.png)
+
+### Details
+![Details](https://i.ibb.co/RCNs4fH/Details.png)
+
+
+
+
+
