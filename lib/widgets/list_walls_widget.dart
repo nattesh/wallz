@@ -118,7 +118,7 @@ class _ListWallsState extends State<ListWalls> {
               sliver: SliverGrid.count(
                   crossAxisSpacing: 5,
                   mainAxisSpacing: 5,
-                  crossAxisCount: 2,
+                  crossAxisCount: MediaQuery.of(context).orientation == Orientation.portrait ? 2 : 3,
                   children: itemList()
               ),
             ),

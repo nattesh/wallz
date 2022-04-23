@@ -136,97 +136,118 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Divider(
-                            thickness: 1,
-                            endIndent: 0,
-                            color: Colors.white,
+              padding: EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Colors.blueAccent,
+                      Colors.pinkAccent,
+                    ],
+                  )
+              ),
+              child: Center(
+                child: Text('Wallpapers from wallhaven.cc',
+                  style: TextStyle(
+                    fontSize: 17,
+                    color: Colors.white
+                  )
+                ),
+              ),
+            ),
+            Container(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          thickness: 1,
+                          endIndent: 0,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Center(
+                        child: Container(
+                          padding: EdgeInsets.all(15),
+                          child: Text('Rapid search',
+                              style: TextStyle(
+                                  fontSize: 15
+                              )
                           ),
                         ),
-                        Center(
-                          child: Container(
-                            padding: EdgeInsets.all(15),
-                            child: Text('Rapid search',
-                                style: TextStyle(
-                                    fontSize: 15
-                                )
+                      ),
+                      Expanded(
+                        child: Divider(
+                          thickness: 1,
+                          endIndent: 0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        width: MediaQuery.of(context).size.width * 0.33,
+                        child: Column (
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              iconSize: 50,
+                              color: Colors.blueAccent,
+                              icon: Icon(Icons.punch_clock),
+                              onPressed: () => {
+                                _searchLatest(context)
+                              },
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Divider(
-                            thickness: 1,
-                            endIndent: 0,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                            alignment: Alignment.center,
-                            width: MediaQuery.of(context).size.width * 0.33,
-                            child: Column (
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                  iconSize: 50,
-                                  color: Colors.blueAccent,
-                                  icon: Icon(Icons.punch_clock),
-                                  onPressed: () => {
-                                    _searchLatest(context)
-                                  },
-                                ),
-                                Text('Latest')
-                              ],
-                            )
-                        ),
-                        Container(
-                          alignment: Alignment.center,
-                          width: MediaQuery.of(context).size.width * 0.33,
-                          child: Column (
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                iconSize: 50,
-                                color: Colors.redAccent,
-                                icon: Icon(Icons.diamond),
-                                onPressed: () {
-                                  _searchToplist(context);
-                                },
-                              ),
-                              Text('Toplist')
-                            ],
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.center,
-                          width: MediaQuery.of(context).size.width * 0.33,
-                          child: Column (
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                iconSize: 50,
-                                color: Colors.amber,
-                                icon: Icon(Icons.shuffle),
-                                onPressed: () {
-                                  _searchRandom(context);
-                                },
-                              ),
-                              Text('Random')
-                            ],
-                          ),
+                            Text('Latest')
+                          ],
                         )
-                      ],
-                    ),
-                  ],
-                )
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        width: MediaQuery.of(context).size.width * 0.33,
+                        child: Column (
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              iconSize: 50,
+                              color: Colors.redAccent,
+                              icon: Icon(Icons.diamond),
+                              onPressed: () {
+                                _searchToplist(context);
+                              },
+                            ),
+                            Text('Toplist')
+                          ],
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        width: MediaQuery.of(context).size.width * 0.33,
+                        child: Column (
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              iconSize: 50,
+                              color: Colors.amber,
+                              icon: Icon(Icons.shuffle),
+                              onPressed: () {
+                                _searchRandom(context);
+                              },
+                            ),
+                            Text('Random')
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              )
             ),
             Container(
               padding: EdgeInsets.only(top: 15),
@@ -409,17 +430,17 @@ class _HomePageState extends State<HomePage> {
                   Padding(
                     padding: EdgeInsets.all(10),
                     child: ElevatedButton(
-                        child: Icon(Icons.search, color: Colors.blueGrey,),
-                        onPressed: () => _manualSearch(context),
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 40, 40, 40)),
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide(color: Colors.blueGrey)
-                                )
-                            )
+                      child: Icon(Icons.search, color: Colors.blueGrey,),
+                      onPressed: () => _manualSearch(context),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 40, 40, 40)),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: Colors.blueGrey)
+                          )
                         )
+                      )
                     ),
                   )
                 ],
