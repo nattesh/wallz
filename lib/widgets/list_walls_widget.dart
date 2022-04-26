@@ -43,6 +43,8 @@ class _ListWallsState extends State<ListWalls> {
 
       if(gotTriggerPoint && isLastPageRendered && !isLastPage) {
         loadNewPage();
+      } else if(currentPos == maxPos && !isLastPageRendered && !isLastPage) {
+        loadNewPage();
       }
     });
   }
@@ -116,10 +118,10 @@ class _ListWallsState extends State<ListWalls> {
             SliverPadding(
               padding: const EdgeInsets.all(5),
               sliver: SliverGrid.count(
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing: 5,
-                  crossAxisCount: MediaQuery.of(context).orientation == Orientation.portrait ? 2 : 3,
-                  children: itemList()
+                crossAxisSpacing: 5,
+                mainAxisSpacing: 5,
+                crossAxisCount: MediaQuery.of(context).orientation == Orientation.portrait ? 2 : 3,
+                children: itemList()
               ),
             ),
           ],

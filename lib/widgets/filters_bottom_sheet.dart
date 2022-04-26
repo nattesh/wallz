@@ -93,183 +93,184 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
       child: Container(
         height: MediaQuery.of(context).size.height / 2,
         width: MediaQuery.of(context).size.width,
-        child: Stack(
-          children: [
-            Container(
-              alignment: Alignment.bottomCenter,
-              padding: EdgeInsets.all(20),
-              margin: EdgeInsets.only(bottom: 10),
-              child: Container(
-                child: ElevatedButton(
-                  child: Icon(Icons.refresh, color: Colors.blueGrey,),
-                  onPressed: () => {
-                    Navigator.pop(context, _newFilters())
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 40, 40, 40)),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                        side: BorderSide(color: Colors.blueGrey)
-                      )
-                    )
-                  )
-                ),
-              )
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: EdgeInsets.all(15),
-                  width: MediaQuery.of(context).size.width,
-                  child: Text('Filters',
-                    style: TextStyle(
-                        fontSize: 25
+        child: SingleChildScrollView(
+          child: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(15),
+                    width: MediaQuery.of(context).size.width,
+                    child: Text('Filters',
+                      style: TextStyle(
+                          fontSize: 25
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
-                  child: Text('Sort by:'),
-                ),
-                Container(
+                  Container(
+                    padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+                    child: Text('Sort by:'),
+                  ),
+                  Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width / 12 * 9,
+                            child: DropdownButton(
+                              isExpanded: true,
+                              value: sortSelect,
+                              items: dropdownItems,
+                              onChanged: (String? value) {
+                                setState(() {
+                                  if(value != null) {
+                                    sortSelect = value;
+                                  }
+                                });
+                              },
+                            ),
+                          ),
+                          IconButton(
+                            icon: getIconBySorting(),
+                            onPressed: () {
+                              setState(() {
+                                sortingOrder = sortingOrder == 'asc' ? 'desc' : 'asc';
+                              });
+                            },
+                          )
+                        ],
+                      )
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(15, 10, 15, 5),
+                    child: Text('Screen ratio:'),
+                  ),
+                  Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: CupertinoSegmentedControl(
+                        unselectedColor: Color.fromARGB(100, 31, 31, 31),
+                        borderColor: Colors.blueGrey,
+                        selectedColor: Colors.blueGrey,
+                        children: screenSizes,
+                        onValueChanged: (int val) {
+                          setState(() {
+                            selectedScreenSize = val;
+                          });
+                        },
+                        groupValue: selectedScreenSize,
+                      )
+                  ),
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.fromLTRB(15, 20, 15, 0),
+                    child: Text('Categories:'),
+                  ),
+                  Container(
                     width: MediaQuery.of(context).size.width,
-                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
                     child: Row(
                       children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width / 12 * 9,
-                          child: DropdownButton(
-                            isExpanded: true,
-                            value: sortSelect,
-                            items: dropdownItems,
-                            onChanged: (String? value) {
+                        Expanded(
+                          child: InputChip(
+                            label: Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Text('Generic'),
+                            ),
+                            onSelected: (bool value) {
                               setState(() {
-                                if(value != null) {
-                                  sortSelect = value;
+                                if(!value) {
+                                  if(animeFilter || peopleFilter) {
+                                    genericFilter = value;
+                                  }
+                                } else {
+                                  genericFilter = value;
                                 }
                               });
                             },
+                            selected: genericFilter,
+                            selectedColor: Colors.blueGrey,
                           ),
                         ),
-                        IconButton(
-                          icon: getIconBySorting(),
-                          onPressed: () {
-                            setState(() {
-                              sortingOrder = sortingOrder == 'asc' ? 'desc' : 'asc';
-                            });
-                          },
-                        )
-                      ],
-                    )
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(15, 10, 15, 5),
-                  child: Text('Screen ratio:'),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: CupertinoSegmentedControl(
-                    unselectedColor: Color.fromARGB(100, 31, 31, 31),
-                    borderColor: Colors.blueGrey,
-                    selectedColor: Colors.blueGrey,
-                    children: screenSizes,
-                    onValueChanged: (int val) {
-                      setState(() {
-                        selectedScreenSize = val;
-                      });
-                    },
-                    groupValue: selectedScreenSize,
-                  )
-                ),
-                Container(
-                  alignment: Alignment.topLeft,
-                  padding: EdgeInsets.fromLTRB(15, 20, 15, 0),
-                  child: Text('Categories:'),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: InputChip(
-                          label: Padding(
-                            padding: EdgeInsets.all(5),
-                            child: Text('Generic'),
-                          ),
-                          onSelected: (bool value) {
-                            setState(() {
-                              if(!value) {
-                                if(animeFilter || peopleFilter) {
-                                  genericFilter = value;
-                                }
-                              } else {
-                                 genericFilter = value;
-                              }
-                            });
-                          },
-                          selected: genericFilter,
-                          selectedColor: Colors.blueGrey,
-                        ),
-                      ),
-                      Center(
-                        child: InputChip(
-                          label: Padding(
-                            padding: EdgeInsets.all(5),
-                            child: Text('Anime'),
-                          ),
-                          onSelected: (bool value) {
-                            setState(() {
-                              if(!value) {
-                                if(genericFilter || peopleFilter) {
+                        Center(
+                          child: InputChip(
+                            label: Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Text('Anime'),
+                            ),
+                            onSelected: (bool value) {
+                              setState(() {
+                                if(!value) {
+                                  if(genericFilter || peopleFilter) {
+                                    animeFilter = value;
+                                  }
+                                } else {
                                   animeFilter = value;
                                 }
-                              } else {
-                                animeFilter = value;
-                              }
-                            });
-                          },
-                          selected: animeFilter,
-                          selectedColor: Colors.blueGrey,
-                        ),
-                      ),
-                      Expanded(
-                        child: InputChip(
-                          label: Padding(
-                            padding: EdgeInsets.all(5),
-                            child: Text('People'),
+                              });
+                            },
+                            selected: animeFilter,
+                            selectedColor: Colors.blueGrey,
                           ),
-                          onSelected: (bool value) {
-                            setState(() {
-                              if(!value) {
-                                if(genericFilter || animeFilter) {
+                        ),
+                        Expanded(
+                          child: InputChip(
+                            label: Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Text('People'),
+                            ),
+                            onSelected: (bool value) {
+                              setState(() {
+                                if(!value) {
+                                  if(genericFilter || animeFilter) {
+                                    peopleFilter = value;
+                                  }
+                                } else {
                                   peopleFilter = value;
                                 }
-                              } else {
-                                peopleFilter = value;
-                              }
-                            });
-                          },
-                          selected: peopleFilter,
-                          selectedColor: Colors.blueGrey,
+                              });
+                            },
+                            selected: peopleFilter,
+                            selectedColor: Colors.blueGrey,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              alignment: Alignment.topRight,
-              child: IconButton(
-                icon: Icon(Icons.close),
-                onPressed: () => Navigator.pop(context, null),
-              )
-            ),
-          ],
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    padding: EdgeInsets.all(20),
+                    child: Container(
+                      child: ElevatedButton(
+                        child: Icon(Icons.refresh, color: Colors.blueGrey,),
+                        onPressed: () => {
+                          Navigator.pop(context, _newFilters())
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 40, 40, 40)),
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(color: Colors.blueGrey)
+                            )
+                          )
+                        )
+                      ),
+                    )
+                  )
+                ],
+              ),
+              Container(
+                  width: MediaQuery.of(context).size.width,
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () => Navigator.pop(context, null),
+                  )
+              ),
+            ],
+          ),
         ),
       ),
     );

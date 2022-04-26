@@ -172,18 +172,9 @@ class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 8 / 5,
-      child: Stack(
+      child: SingleChildScrollView(
+        child: Stack(
           children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              alignment: Alignment.bottomCenter,
-              padding: EdgeInsets.all(20),
-              margin: EdgeInsets.only(bottom: 30),
-              child: SizedBox(
-                width: double.infinity,
-                child: _renderDownloadSection(),
-              )
-            ),
             Column (
               children: [
                 Container(
@@ -199,27 +190,27 @@ class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
                   padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
                   width: MediaQuery.of(context).size.width,
                   child: Row(
-                      children: [
-                        Text('Uploader' + ': ',
-                          style: TextStyle(
-                              fontSize: 15
-                          ),
+                    children: [
+                      Text('Uploader' + ': ',
+                        style: TextStyle(
+                            fontSize: 15
                         ),
-                        Container(
-                          width: 50,
-                          height: 32,
-                          child: Image.network(widget.details.uploader.avatar.large),
+                      ),
+                      Container(
+                        width: 50,
+                        height: 32,
+                        child: Image.network(widget.details.uploader.avatar.large),
+                      ),
+                      Text(' ' + widget.details.uploader.username,
+                        style: TextStyle(
+                            fontSize: 15
                         ),
-                        Text(' ' + widget.details.uploader.username,
-                          style: TextStyle(
-                              fontSize: 15
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.search),
-                          onPressed: () => _searchByUser(widget.details.uploader.username, context),
-                        ),
-                      ],
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: () => _searchByUser(widget.details.uploader.username, context),
+                      ),
+                    ],
                   )
                 ),
                 Container(
@@ -232,18 +223,18 @@ class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
                       ),
                       Text(' ' + widget.details.favorites.toString() + '    ',
                         style: TextStyle(
-                            fontSize: 15
+                          fontSize: 15
                         ),
                       ),
                       Padding(
                         padding: EdgeInsets.all(5),
                       ),
                       Icon(
-                          Icons.remove_red_eye_sharp
+                        Icons.remove_red_eye_sharp
                       ),
                       Text(' ' + widget.details.views.toString() + '  ',
                         style: TextStyle(
-                            fontSize: 15
+                          fontSize: 15
                         ),
                       ),
                       Padding(
@@ -252,7 +243,7 @@ class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
                       getOrientationIcon(widget.details.dimensionX, widget.details.dimensionY),
                       Text(' ' + widget.details.resolution,
                         style: TextStyle(
-                            fontSize: 15
+                          fontSize: 15
                         ),
                       ),
                     ],
@@ -287,17 +278,17 @@ class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
-                  width: MediaQuery.of(context).size.width,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: _renderTags(widget.details.tags, context),
-                    ),
-                  )
+                    padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
+                    width: MediaQuery.of(context).size.width,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: _renderTags(widget.details.tags, context),
+                      ),
+                    )
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
+                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                   width: MediaQuery.of(context).size.width,
                   child: Center(
                     child: ElevatedButton(
@@ -319,7 +310,16 @@ class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
                       ),
                     ),
                   )
-                )
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  alignment: Alignment.bottomCenter,
+                  padding: EdgeInsets.all(20),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: _renderDownloadSection(),
+                  )
+                ),
               ],
             ),
             Container(
@@ -331,7 +331,8 @@ class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
               )
             ),
           ]
-      ),
+        ),
+      )
     );
   }
 }
