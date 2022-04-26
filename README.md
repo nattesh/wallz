@@ -1,12 +1,12 @@
 # Wallz
 
 This is Wallz, a Flutter project about a mobile App which consumes APIs from [Wallhaven](https://wallhaven.cc) (you may find api documentation [here](https://wallhaven.cc/help/api)).
-This app is intented to offer a mobile experience of the original website, all the contents and resources are up to [Wallhaven](https://wallhaven.cc).
+This app is intended to offer a mobile experience of the original website, all the contents and resources are up to [Wallhaven](https://wallhaven.cc).
 
 The app will work both on iOS and Android.
 
 ## Configuring the project
-Wallz is a pretty standard flutter projec, so you can clone it and build it 'as is'. 
+Wallz is a pretty standard flutter project, so you can clone it and build it 'as is'. 
 To prepare your development environment just run (from root directory of the project): 
 
 `flutter pub get`
