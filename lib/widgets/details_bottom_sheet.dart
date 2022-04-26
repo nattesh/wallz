@@ -31,7 +31,7 @@ class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
     searchFilters = widget.filters;
   }
 
-  void _saveNetworkImage(BuildContext context) async {
+  void _saveNetworkImage() async {
     _startDownloading();
     String path = widget.details.path;
     await GallerySaver.saveImage(path);
@@ -153,7 +153,7 @@ class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
       } else {
         return ElevatedButton(
           child: Text('DOWNLOAD'),
-          onPressed: () => _saveNetworkImage(context),
+          onPressed: () => _saveNetworkImage(),
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(Colors.blueGrey),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
