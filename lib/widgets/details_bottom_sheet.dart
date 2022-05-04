@@ -34,7 +34,7 @@ class _DetailsBottomSheetState extends State<DetailsBottomSheet> {
   void _saveNetworkImage() async {
     _startDownloading();
     String path = widget.details.path;
-    await GallerySaver.saveImage(path);
+    await GallerySaver.saveImage(path, albumName: "Wallz");
     _endDownloading();
   }
 
