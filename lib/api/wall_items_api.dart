@@ -7,7 +7,6 @@ import 'package:wallz/props/api_properties.dart';
 import 'package:wallz/models/query_filter.dart';
 
 Future<ApiResponse> getData(int page, Filters filters) async {
-
   var ratios = filters.ratios;
   var categories = filters.categories;
   var purity = filters.purity;
@@ -16,53 +15,53 @@ Future<ApiResponse> getData(int page, Filters filters) async {
   var colors = filters.colors;
   var apiKey = '';
 
-  var url = baseUrl + '?page=${page}';
+  var url = baseUrl + '?page=$page';
   url = handleQuery(url, filters.query, sorting);
 
-  if(ratios != null && ratios.isNotEmpty) {
-    url += '&ratios=${ratios}';
+  if (ratios.isNotEmpty) {
+    url += '&ratios=$ratios';
   }
-  if(categories != null && categories.isNotEmpty) {
-    url += '&categories=${categories}';
+  if (categories.isNotEmpty) {
+    url += '&categories=$categories';
   }
-  if(sorting != null && sorting.isNotEmpty) {
-    if(url.indexOf('&sorting') == -1) {
-      url += '&sorting=${sorting}';
+  if (sorting.isNotEmpty) {
+    if (!url.contains('&sorting')) {
+      url += '&sorting=$sorting';
     }
   }
-  if(purity != null && purity.isNotEmpty) {
-    url += '&purity=${purity}';
+  if (purity.isNotEmpty) {
+    url += '&purity=$purity';
   }
-  if(order != null && order.isNotEmpty) {
-    url += '&order=${order}';
+  if (order.isNotEmpty) {
+    url += '&order=$order';
   }
-  if(apiKey != null && apiKey.isNotEmpty) {
-    url += '&apikey=${apiKey}';
+  if (apiKey.isNotEmpty) {
+    url += '&apikey=$apiKey';
   }
-  if(colors != null && colors.isNotEmpty) {
-    url += '&colors=${colors}';
+  if (colors.isNotEmpty) {
+    url += '&colors=$colors';
   }
-  print(url);
+
   final response = await http.get(Uri.parse(url));
   return ApiResponse.fromJson(jsonDecode(response.body));
 }
 
 String handleQuery(String url, QueryFilter query, String sorting) {
-  var tagName =  query.tagName;
+  var tagName = query.tagName;
   var like = query.like;
   var username = query.username;
 
   tagName = tagName.trim().replaceAll(' ', '+');
 
-  if(tagName != null && tagName.isNotEmpty) {
-    url += '&q=${tagName}';
-    if(sorting == null || sorting.isEmpty) {
+  if (tagName.isNotEmpty) {
+    url += '&q=$tagName';
+    if (sorting.isEmpty) {
       url += '&sorting=relevance';
     }
-  } else if(like != null && like.isNotEmpty) {
-    url += '&q=like:${like}';
-  } else if(username != null && username.isNotEmpty) {
-    url += '&q=@${username}';
+  } else if (like.isNotEmpty) {
+    url += '&q=like:$like';
+  } else if (username.isNotEmpty) {
+    url += '&q=@$username';
   } else {
     url += '&q=';
   }

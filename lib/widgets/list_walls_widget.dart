@@ -6,8 +6,12 @@ import 'package:wallz/models/filters.dart';
 import 'package:wallz/utils/constants.dart';
 
 class ListWalls extends StatefulWidget {
-
-  const ListWalls({Key? key, required this.walls, required this.lastPage, required this.filters}) : super(key: key);
+  const ListWalls(
+      {Key? key,
+      required this.walls,
+      required this.lastPage,
+      required this.filters})
+      : super(key: key);
 
   final List<WallItem> walls;
   final int lastPage;
@@ -18,7 +22,6 @@ class ListWalls extends StatefulWidget {
 }
 
 class _ListWallsState extends State<ListWalls> {
-
   int requestPage = 1;
   int renderedPage = 0;
   double offset = 0;
@@ -28,22 +31,21 @@ class _ListWallsState extends State<ListWalls> {
   @override
   void initState() {
     super.initState();
-    this.isLastPage = widget.lastPage == 1;
+    isLastPage = widget.lastPage == 1;
     _scrollController.addListener(() {
-
       double currentPos = _scrollController.offset;
       double maxPos = _scrollController.position.maxScrollExtent;
 
-      if(offset == 0) {
+      if (offset == 0) {
         offset = maxPos - 1;
       }
 
       bool gotTriggerPoint = currentPos > (maxPos - offset);
       bool isLastPageRendered = requestPage == renderedPage;
 
-      if(gotTriggerPoint && isLastPageRendered && !isLastPage) {
+      if (gotTriggerPoint && isLastPageRendered && !isLastPage) {
         loadNewPage();
-      } else if(currentPos == maxPos && !isLastPageRendered && !isLastPage) {
+      } else if (currentPos == maxPos && !isLastPageRendered && !isLastPage) {
         loadNewPage();
       }
     });
@@ -66,43 +68,36 @@ class _ListWallsState extends State<ListWalls> {
   List<Widget> itemList() {
     List<Widget> result = [];
 
-    widget.walls.forEach((element) {
+    for (var element in widget.walls) {
       var src = element.thumbs.original;
-      var img = Image(
-          image: NetworkImage(src),
-          fit: BoxFit.cover
-      );
+      var img = Image(image: NetworkImage(src), fit: BoxFit.cover);
 
-      result.add(
-        Stack(
-          children: [
-            Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20))
-              ),
-              child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return WallDownloadPage(item: element, filters: widget.filters,);
-                    }));
-                  },
-                  child: Hero(
-                      tag: element.id,
-                      child: img
-                  )
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.all(5),
-              alignment: Alignment.bottomRight,
-              child: getOrientationIcon(element.dimensionX, element.dimensionY),
-            )
-          ],
-        )
-      );
-    });
+      result.add(Stack(
+        children: [
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20))),
+            child: GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return WallDownloadPage(
+                      item: element,
+                      filters: widget.filters,
+                    );
+                  }));
+                },
+                child: Hero(tag: element.id, child: img)),
+          ),
+          Container(
+            padding: const EdgeInsets.all(5),
+            alignment: Alignment.bottomRight,
+            child: getOrientationIcon(element.dimensionX, element.dimensionY),
+          )
+        ],
+      ));
+    }
     renderedPage++;
     return result;
   }
@@ -114,15 +109,17 @@ class _ListWallsState extends State<ListWalls> {
         CustomScrollView(
           primary: false,
           controller: _scrollController,
-          slivers: <Widget> [
+          slivers: <Widget>[
             SliverPadding(
               padding: const EdgeInsets.all(5),
               sliver: SliverGrid.count(
-                crossAxisSpacing: 5,
-                mainAxisSpacing: 5,
-                crossAxisCount: MediaQuery.of(context).orientation == Orientation.portrait ? 2 : 3,
-                children: itemList()
-              ),
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 5,
+                  crossAxisCount:
+                      MediaQuery.of(context).orientation == Orientation.portrait
+                          ? 2
+                          : 3,
+                  children: itemList()),
             ),
           ],
         ),

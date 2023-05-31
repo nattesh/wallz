@@ -9,7 +9,8 @@ import 'package:wallz/models/filters.dart';
 import 'package:flutter/services.dart';
 
 class WallDownloadPage extends StatefulWidget {
-  const WallDownloadPage({Key? key, required this.item, required Filters this.filters}) : super(key: key);
+  const WallDownloadPage({Key? key, required this.item, required this.filters})
+      : super(key: key);
 
   final WallItem item;
   final Filters filters;
@@ -19,7 +20,6 @@ class WallDownloadPage extends StatefulWidget {
 }
 
 class _WallDownloadPageState extends State<WallDownloadPage> {
-
   late ApiDetailsResponse responseDetails;
   late Filters searchFilters;
   bool immersive = false;
@@ -36,7 +36,7 @@ class _WallDownloadPageState extends State<WallDownloadPage> {
   _toggleImmersive() {
     setState(() {
       immersive = !immersive;
-      if(immersive) {
+      if (immersive) {
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
       } else {
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
@@ -50,64 +50,71 @@ class _WallDownloadPageState extends State<WallDownloadPage> {
       onWillPop: () async => false,
       child: Scaffold(
         body: Hero(
-          tag: widget.item.id,
-          child: Stack(
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: Image(
-                    image: NetworkImage(widget.item.thumbs.original),
-                    fit: BoxFit.cover
+            tag: widget.item.id,
+            child: Stack(
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: Image(
+                      image: NetworkImage(widget.item.thumbs.original),
+                      fit: BoxFit.cover),
                 ),
-              ),
-              Center(
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  _toggleImmersive();
-                },
-                child: PhotoView(
-                  initialScale: PhotoViewComputedScale.covered * 1.0,
-                  enableRotation: false,
-                  enablePanAlways: false,
-                  imageProvider: CachedNetworkImageProvider(widget.item.path),
-                ),
-              ),
-              Container(
-                alignment: Alignment.topLeft,
-                padding: EdgeInsets.fromLTRB(0, 50, 20, 20),
-                child: !immersive ? ElevatedButton(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all(CircleBorder()),
-                    backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 48, 48, 48)),
-                    shadowColor: MaterialStateProperty.all(Colors.black)
+                const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
                   ),
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(19, 10, 10, 10),
-                    child: Icon(Icons.arrow_back_ios),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _toggleImmersive();
                   },
-                ) : null,
+                  child: PhotoView(
+                    initialScale: PhotoViewComputedScale.covered * 1.0,
+                    enableRotation: false,
+                    enablePanAlways: false,
+                    imageProvider: CachedNetworkImageProvider(widget.item.path),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.topLeft,
+                  padding: const EdgeInsets.fromLTRB(0, 50, 20, 20),
+                  child: !immersive
+                      ? ElevatedButton(
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all(
+                                  const CircleBorder()),
+                              backgroundColor: MaterialStateProperty.all(
+                                  const Color.fromARGB(255, 48, 48, 48)),
+                              shadowColor:
+                                  MaterialStateProperty.all(Colors.black)),
+                          child: const Padding(
+                            padding: EdgeInsets.fromLTRB(19, 10, 10, 10),
+                            child: Icon(Icons.arrow_back_ios),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      : null,
+                )
+              ],
+            )),
+        floatingActionButton: !immersive
+            ? FloatingActionButton(
+                onPressed: () {
+                  showModalBottomSheet<void>(
+                    context: context,
+                    builder: (_) => DetailsBottomSheet(
+                      details: responseDetails.data,
+                      filters: searchFilters,
+                    ),
+                  );
+                },
+                child: const Icon(Icons.info),
+                backgroundColor: const Color.fromARGB(255, 48, 48, 48),
+                foregroundColor: Colors.white,
               )
-            ],
-          )
-        ),
-        floatingActionButton: !immersive ? FloatingActionButton(
-          onPressed: () {
-            showModalBottomSheet<void>(
-              context: context,
-              builder: (_) => DetailsBottomSheet(details: responseDetails.data, filters: searchFilters,),
-            );
-          },
-          child: const Icon(Icons.info),
-          backgroundColor: Color.fromARGB(255, 48, 48, 48),
-          foregroundColor: Colors.white,
-        ) : null,
+            : null,
       ),
     );
   }

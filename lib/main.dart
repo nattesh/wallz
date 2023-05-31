@@ -12,7 +12,6 @@ class WallzApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: MaterialApp(
@@ -30,7 +29,3 @@ class WallzApp extends StatelessWidget {
     );
   }
 }
-
-
-
-
